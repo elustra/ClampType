@@ -3,47 +3,39 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ClampType — Fluid Typography Scale for Figma</title>
-<meta name="description" content="Generate mathematically perfect fluid typography scales. CSS clamp(), Figma Variables, and frame output — all in one free Figma plugin. H1 to Caption, 20+ global scripts, zero API."/>
+<title>ClampType — Fluid Typography Scale Generator</title>
+<meta name="description" content="Generate mathematically perfect fluid typography scales. CSS clamp(), Figma Variables, and frame output — all in one free Figma plugin. Use the web app or install on Figma."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<!-- Favicon -->
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="mask-icon" href="favicon.svg" color="#D46026">
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800;900&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 78 74'%3E%3Crect width='78' height='74' rx='14' fill='%23D46026'/%3E%3Cpath d='M20.9233 6.75L20.9409 6.98047L21.2671 11.2109L21.2876 11.4795H21.0181C18.5728 11.4795 16.7978 12.0161 15.646 13.043L15.645 13.0439C14.5193 14.0435 13.7603 15.4242 13.3784 17.2041C13.0351 19.0063 12.8628 21.0491 12.8628 23.334V50.666C12.8628 52.9068 13.035 54.9497 13.3784 56.7959L13.4546 57.125C13.8568 58.7469 14.5897 60.019 15.645 60.9561L15.646 60.957C16.7978 61.9839 18.5728 62.5205 21.0181 62.5205H21.2876L21.2671 62.7891L20.9409 67.0195L20.9233 67.25H20.6919C17.2821 67.25 14.5835 66.7052 12.6196 65.5908V65.5898C10.691 64.5141 9.30913 62.7695 8.46729 60.3799C7.63076 58.0052 7.12892 54.8978 6.95459 51.0674C6.78062 47.2013 6.69385 42.512 6.69385 37C6.69385 31.4448 6.78062 26.7554 6.95459 22.9326C7.12892 19.1022 7.63076 15.9948 8.46729 13.6201C9.3094 11.2297 10.692 9.48382 12.6216 8.4082C14.5853 7.29455 17.2832 6.75002 20.6919 6.75H20.9233Z' fill='white'/%3E%3Cpath d='M57.1958 6.75C60.6014 6.75002 63.2774 7.29382 65.1987 8.40723C67.172 9.48219 68.5776 11.2279 69.4204 13.6201C70.2569 15.9948 70.7588 19.1022 70.9331 22.9326C71.1071 26.7554 71.1938 31.4448 71.1938 37C71.1938 42.512 71.1071 47.2013 70.9331 51.0674C70.7588 54.8978 70.2569 58.0052 69.4204 60.3799C68.5777 62.772 67.1728 64.5178 65.1997 65.5928L65.1987 65.5918C63.2774 66.7054 60.6017 67.25 57.1958 67.25H56.9644L56.9468 67.0195L56.6206 62.7891L56.6001 62.5205H56.8696C59.3609 62.5205 61.1325 61.983 62.2388 60.96L62.2427 60.9561C63.3668 59.958 64.1037 58.5795 64.4429 56.8018L64.4438 56.7969L64.5796 56.0957C64.876 54.4373 65.0249 52.6277 65.0249 50.666V23.334C65.0249 21.0484 64.8304 19.0055 64.4438 17.2041L64.4429 17.1982C64.1037 15.4205 63.3668 14.042 62.2427 13.0439L62.2388 13.04C61.1325 12.017 59.3609 11.4795 56.8696 11.4795H56.6001L56.6206 11.2109L56.9468 6.98047L56.9644 6.75H57.1958Z' fill='white'/%3E%3Cpath d='M51.5562 13.9082V18.9639H41.978V59.9619H35.8745V18.9639H26.2964V13.9082H51.5562Z' fill='white'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 78 74'%3E%3Crect width='78' height='74' rx='14' fill='%23D46026'/%3E%3Cpath d='M20.9233 6.75L20.9409 6.98047L21.2671 11.2109L21.2876 11.4795H21.0181C18.5728 11.4795 16.7978 12.0161 15.646 13.043L15.645 13.0439C14.5193 14.0435 13.7603 15.4242 13.3784 17.2041C13.0351 19.0063 12.8628 21.0491 12.8628 23.334V50.666C12.8628 52.9068 13.035 54.9497 13.3784 56.7959L13.4546 57.125C13.8568 58.7469 14.5897 60.019 15.645 60.9561L15.646 60.957C16.7978 61.9839 18.5728 62.5205 21.0181 62.5205H21.2876L21.2671 62.7891L20.9409 67.0195L20.9233 67.25H20.6919C17.2821 67.25 14.5835 66.7052 12.6196 65.5908V65.5898C10.691 64.5141 9.30913 62.7695 8.46729 60.3799C7.63076 58.0052 7.12892 54.8978 6.95459 51.0674C6.78062 47.2013 6.69385 42.512 6.69385 37C6.69385 31.4448 6.78062 26.7554 6.95459 22.9326C7.12892 19.1022 7.63076 15.9948 8.46729 13.6201C9.3094 11.2297 10.692 9.48382 12.6216 8.4082C14.5853 7.29455 17.2832 6.75002 20.6919 6.75H20.9233Z' fill='white'/%3E%3Cpath d='M57.1958 6.75C60.6014 6.75002 63.2774 7.29382 65.1987 8.40723C67.172 9.48219 68.5776 11.2279 69.4204 13.6201C70.2569 15.9948 70.7588 19.1022 70.9331 22.9326C71.1071 26.7554 71.1938 31.4448 71.1938 37C71.1938 42.512 71.1071 47.2013 70.9331 51.0674C70.7588 54.8978 70.2569 58.0052 69.4204 60.3799C68.5777 62.772 67.1728 64.5178 65.1997 65.5928L65.1987 65.5918C63.2774 66.7054 60.6017 67.25 57.1958 67.25H56.9644L56.9468 67.0195L56.6206 62.7891L56.6001 62.5205H56.8696C59.3609 62.5205 61.1325 61.983 62.2388 60.96L62.2427 60.9561C63.3668 59.958 64.1037 58.5795 64.4429 56.8018L64.4438 56.7969L64.5796 56.0957C64.876 54.4373 65.0249 52.6277 65.0249 50.666V23.334C65.0249 21.0484 64.8304 19.0055 64.4438 17.2041L64.4429 17.1982C64.1037 15.4205 63.3668 14.042 62.2427 13.0439L62.2388 13.04C61.1325 12.017 59.3609 11.4795 56.8696 11.4795H56.6001L56.6206 11.2109L56.9468 6.98047L56.9644 6.75H57.1958Z' fill='white'/%3E%3Cpath d='M51.5562 13.9082V18.9639H41.978V59.9619H35.8745V18.9639H26.2964V13.9082H51.5562Z' fill='white'/%3E%3C/svg%3E">
 <style>
 :root{
-  /* Exact plugin palette match */
-  --orange:#D46026;        /* --accent */
-  --orange-dk:#B03A10;     /* --accent-dk (hover) */
-
-  /* Section backgrounds — solid only */
-  --surf:#FFFFFF;          /* --surf */
-  --bg:#FFF8F2;            /* --bg */
-  --bg2:#FFF2E8;           /* --surf2 equivalent */
-  --surf3:#FFEEDE;         /* --surf3 */
-  --hdr:#FBF5EE;           /* --hdr */
-  --hero-bg:#1A0808;       /* dark sections */
-
-  /* Borders */
+  --orange:#D46026;
+  --orange-dk:#B03A10;
+  --orange-lt:#F26A2F;
+  --amber:#FD9651;
+  --surf:#FFFFFF;
+  --bg:#FFF8F2;
+  --bg2:#FFF2E8;
+  --surf3:#FFEEDE;
+  --hdr:#FBF5EE;
+  --hero-bg:#1A0808;
   --bdr:rgba(212,96,38,.13);
   --bdr-dark:rgba(212,96,38,.24);
-
-  /* Text — exact plugin values */
   --ink:#2D1208;
   --ink2:#7A3920;
   --ink3:#B07054;
-
   --font:'Golos Text',system-ui,sans-serif;
   --mono:'DM Mono','Courier New',monospace;
   --max:1160px;
+  --r:14px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:var(--font);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 
-/* ═══════════════════════════════════════════
-   NAV — off-white bg, dark orange logos
-════════════════════════════════════════════ */
+/* ══════════ NAV ══════════ */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
@@ -51,337 +43,389 @@ nav{
   background:var(--hdr);
   border-bottom:1.5px solid var(--bdr-dark);
 }
-/* Logo left */
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
-.nav-logo-icon{
-  width:32px;height:30px;
-  background:#D46026;
-  border-radius:7px;
-  display:flex;align-items:center;justify-content:center;padding:5px;
-  flex-shrink:0;
-}
+.nav-logo-icon{width:32px;height:30px;background:#D46026;border-radius:7px;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0;}
 .nav-logo-icon svg{width:22px;height:20px;display:block;}
 .nav-name{font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.25px;white-space:nowrap;}
-
-/* Nav links */
 .nav-links{display:flex;align-items:center;gap:4px;}
-.nav-link{
-  padding:7px 12px;font-size:13px;font-weight:600;
-  color:var(--ink2);text-decoration:none;
-  border-radius:8px;transition:color .14s,background .14s;white-space:nowrap;
-}
+.nav-link{padding:7px 12px;font-size:13px;font-weight:600;color:var(--ink2);text-decoration:none;border-radius:8px;transition:color .14s,background .14s;white-space:nowrap;}
 .nav-link:hover{color:var(--ink);background:rgba(212,96,38,.08);}
-.nav-cta{
-  background:#D46026;color:#fff!important;
-  padding:8px 16px!important;border-radius:8px;
-  box-shadow:0 3px 12px rgba(212,96,38,.36);
-  transition:background .14s,transform .14s,box-shadow .14s;
-}
+.nav-cta{background:#D46026;color:#fff!important;padding:8px 16px!important;border-radius:8px;box-shadow:0 3px 12px rgba(212,96,38,.36);transition:background .14s,transform .14s,box-shadow .14s;}
 .nav-cta:hover{background:#B03A10;transform:translateY(-1px);box-shadow:0 5px 16px rgba(212,96,38,.44);}
-
 .nav-ham{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
 .nav-ham span{width:22px;height:2px;background:var(--ink);border-radius:2px;transition:transform .28s,opacity .28s;display:block;}
 .nav-ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
 .nav-ham.open span:nth-child(2){opacity:0;}
 .nav-ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-.nav-drawer{
-  display:none;position:fixed;top:64px;left:0;right:0;z-index:99;
-  background:var(--hdr);border-bottom:1.5px solid var(--bdr-dark);
-  flex-direction:column;padding:14px 20px 18px;gap:4px;
-}
+.nav-drawer{display:none;position:fixed;top:64px;left:0;right:0;z-index:99;background:var(--hdr);border-bottom:1.5px solid var(--bdr-dark);flex-direction:column;padding:14px 20px 18px;gap:4px;}
 .nav-drawer.open{display:flex;}
 .nav-drawer .nav-link{padding:11px 14px;font-size:14px;border-radius:8px;}
 .nav-drawer .nav-cta{margin-top:6px;text-align:center;padding:12px 14px!important;font-size:14px;border-radius:8px;}
 
-/* ═══════════════════════════════════════════
-   HERO — solid dark bg, no gradients on sections
-════════════════════════════════════════════ */
+/* ══════════ HERO ══════════ */
 .hero{
-  min-height:100vh;
-  background:var(--hero-bg);
+  min-height:100vh;background:var(--hero-bg);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:120px 24px 80px;
-  position:relative;overflow:hidden;
+  text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden;
 }
-/* hero glow removed — solid bg only */
-
-/* Presented by Elustra badge */
-.presented-by{
-  display:inline-flex;align-items:center;gap:12px;
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
-  padding:8px 20px 8px 14px;border-radius:100px;margin-bottom:28px;
-}
+.presented-by{display:inline-flex;align-items:center;gap:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);padding:8px 20px 8px 14px;border-radius:100px;margin-bottom:28px;}
 .presented-by-txt{font-size:11px;font-weight:500;color:rgba(255,255,255,.55);letter-spacing:.06em;}
-/* Elustra full wordmark — larger, all 7 paths, white */
-.elustra-hero{
-  height:22px;   /* increased from 14px */
-  width:auto;
-  display:block;
-  flex-shrink:0;
-}
-
-.eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);
-  color:rgba(255,255,255,.9);font-size:12px;font-weight:600;letter-spacing:.5px;
-  padding:7px 18px;border-radius:100px;margin-bottom:32px;
-}
+.elustra-hero{height:22px;width:auto;display:block;flex-shrink:0;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.9);font-size:12px;font-weight:600;letter-spacing:.5px;padding:7px 18px;border-radius:100px;margin-bottom:32px;}
 .dot{width:7px;height:7px;border-radius:50%;background:#4ADE80;animation:pulse 2s ease infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.38}}
-
-/* Title Case headlines */
-.hero h1{
-  font-size:clamp(34px,6.5vw,76px);font-weight:800;color:#fff;
-  letter-spacing:-2px;line-height:1.06;max-width:860px;
-  margin:0 auto 24px;position:relative;z-index:1;
-}
-.hero h1 span{color:var(--honey);}
-
-.hero-sub{
-  font-size:clamp(15px,2vw,19px);font-weight:400;line-height:1.65;
-  color:rgba(255,255,255,.6);max-width:580px;margin:0 auto 46px;
-  position:relative;z-index:1;
-}
-.hero-btns{
-  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
-  justify-content:center;position:relative;z-index:1;
-}
-.btn-p{
-  display:inline-flex;align-items:center;gap:9px;
-  background:#D46026;color:#fff;
-  font-family:var(--font);font-size:14.5px;font-weight:700;
-  padding:13px 26px;border-radius:10px;text-decoration:none;border:none;cursor:pointer;
-  box-shadow:0 6px 22px rgba(212,96,38,.48);
-  transition:background .18s,transform .18s,box-shadow .18s;
-}
+.hero h1{font-size:clamp(34px,6.5vw,76px);font-weight:800;color:#fff;letter-spacing:-2px;line-height:1.06;max-width:860px;margin:0 auto 24px;position:relative;z-index:1;}
+.hero h1 span{color:var(--amber);}
+.hero-sub{font-size:clamp(15px,2vw,19px);font-weight:400;line-height:1.65;color:rgba(255,255,255,.6);max-width:580px;margin:0 auto 46px;position:relative;z-index:1;}
+.hero-btns{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;}
+.btn-p{display:inline-flex;align-items:center;gap:9px;background:#D46026;color:#fff;font-family:var(--font);font-size:14.5px;font-weight:700;padding:13px 26px;border-radius:10px;text-decoration:none;border:none;cursor:pointer;box-shadow:0 6px 22px rgba(212,96,38,.48);transition:background .18s,transform .18s,box-shadow .18s;}
 .btn-p:hover{background:#B03A10;transform:translateY(-2px);box-shadow:0 10px 28px rgba(212,96,38,.52);}
-.btn-g{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.22);
-  color:#fff;font-family:var(--font);font-size:14px;font-weight:600;
-  padding:12px 22px;border-radius:10px;text-decoration:none;
-  transition:background .18s,transform .18s;
-}
+.btn-g{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.22);color:#fff;font-family:var(--font);font-size:14px;font-weight:600;padding:12px 22px;border-radius:10px;text-decoration:none;transition:background .18s,transform .18s;}
 .btn-g:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
-
-.stats-strip{
-  display:flex;align-items:center;gap:36px;flex-wrap:wrap;
-  justify-content:center;margin-top:64px;position:relative;z-index:1;
-}
+.stats-strip{display:flex;align-items:center;gap:36px;flex-wrap:wrap;justify-content:center;margin-top:64px;position:relative;z-index:1;}
 .stat-h{text-align:center;}
 .stat-n{font-size:30px;font-weight:800;color:#fff;line-height:1;}
 .stat-l{font-size:10px;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.8px;text-transform:uppercase;margin-top:5px;}
 .stat-d{width:1px;height:40px;background:rgba(255,255,255,.14);}
 
-/* ═══════════════════════════════════════════
-   SECTION SHARED STYLES
-════════════════════════════════════════════ */
+/* ══════════ SECTIONS SHARED ══════════ */
 section{padding:88px 24px;}
 .container{max-width:var(--max);margin:0 auto;}
-/* Title Case chip */
-.s-chip{
-  display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;
-  text-transform:uppercase;color:#D46026;margin-bottom:14px;
-  padding:5px 14px;background:#FFEEDE;border-radius:100px;
-}
-/* Title Case h2 */
+.s-chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#D46026;margin-bottom:14px;padding:5px 14px;background:#FFEEDE;border-radius:100px;}
 .s-h{font-size:clamp(24px,3.8vw,44px);font-weight:800;letter-spacing:-1px;color:var(--ink);margin-bottom:16px;line-height:1.12;}
 .s-h span{color:#D46026;}
 .s-p{font-size:16.5px;color:var(--ink2);max-width:560px;line-height:1.65;}
 
-/* ═══════════════════════════════════════════
-   HOW IT WORKS — solid white bg
-════════════════════════════════════════════ */
+/* ══════════ WEB TOOL SECTION ══════════ */
+.tool-bg{background:var(--bg2);}
+.tool-layout{
+  display:grid;
+  grid-template-columns:380px 1fr;
+  gap:28px;
+  margin-top:52px;
+  align-items:start;
+}
+.tool-panel{
+  background:var(--surf);
+  border:1.5px solid var(--bdr-dark);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 8px 32px rgba(212,96,38,.08);
+  position:sticky;
+  top:84px;
+}
+.tool-panel-hdr{
+  padding:18px 22px;
+  background:var(--surf3);
+  border-bottom:1.5px solid var(--bdr);
+  display:flex;align-items:center;gap:12px;
+}
+.tool-panel-hdr-icon{
+  width:34px;height:34px;background:#D46026;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.tool-panel-hdr-icon svg{width:20px;height:18px;display:block;}
+.tph-name{font-size:15px;font-weight:700;color:var(--ink);}
+.tph-sub{font-size:13px;color:var(--ink3);}
+
+/* Input groups */
+.tp-section{padding:18px 22px;border-bottom:1px solid var(--bdr);}
+.tp-section:last-child{border-bottom:none;}
+.tp-label{font-size:12px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.ratio-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.ratio-tile{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:10px 4px;border-radius:9px;
+  border:1.5px solid var(--bdr);background:var(--bg);
+  cursor:pointer;transition:all .13s;
+}
+.ratio-tile:hover:not(.on){border-color:#D46026;background:var(--surf3);transform:translateY(-1px);}
+.ratio-tile.on{background:#D46026;border-color:#D46026;}
+.ratio-val{font-size:12px;font-weight:700;color:var(--ink);transition:color .13s;font-family:var(--mono);}
+.ratio-name{font-size:10px;font-weight:600;letter-spacing:.1px;color:var(--ink3);transition:color .13s;text-align:center;}
+.ratio-tile.on .ratio-val,.ratio-tile.on .ratio-name{color:#fff;}
+.inp-row{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--bdr);border-radius:10px;overflow:hidden;margin-bottom:10px;transition:border-color .13s;}
+.inp-row:focus-within{border-color:#D46026;box-shadow:0 0 0 3px rgba(212,96,38,.12);}
+.inp-label{padding:0 13px;font-size:13px;font-weight:700;color:var(--ink3);white-space:nowrap;border-right:1px solid var(--bdr);height:44px;display:flex;align-items:center;min-width:70px;}
+.inp-in{flex:1;border:none;outline:none;padding:10px 12px;font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink);background:transparent;min-width:0;}
+.inp-unit{padding:0 12px 0 0;font-size:13px;font-weight:600;color:var(--ink3);flex-shrink:0;}
+.sel-in{flex:1;border:none;outline:none;padding:10px 12px;font-family:var(--font);font-size:14px;font-weight:600;color:var(--ink);background:transparent;cursor:pointer;}
+.custom-text-input{
+  width:100%;border:1.5px solid var(--bdr);border-radius:10px;
+  padding:11px 14px;font-family:var(--font);font-size:14px;font-weight:500;
+  color:var(--ink);background:var(--bg);outline:none;
+  transition:border-color .13s;
+}
+.custom-text-input:focus{border-color:#D46026;box-shadow:0 0 0 3px rgba(212,96,38,.12);}
+.custom-text-input::placeholder{color:var(--ink3);}
+.inp-hint{font-size:12px;color:var(--ink3);margin-top:7px;line-height:1.5;}
+
+/* Generate buttons */
+.gen-btns{padding:18px 22px;display:flex;flex-direction:column;gap:10px;}
+.gen-btn-web{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:9px;
+  padding:13px 20px;border-radius:10px;font-family:var(--font);font-size:15px;font-weight:700;
+  cursor:pointer;border:none;transition:all .18s;
+}
+.gen-btn-dl{
+  background:#D46026;color:#fff;
+  box-shadow:0 4px 16px rgba(212,96,38,.36);
+}
+.gen-btn-dl:hover{background:#B03A10;transform:translateY(-2px);box-shadow:0 7px 22px rgba(212,96,38,.44);}
+.gen-btn-copy{
+  background:var(--bg);color:var(--ink);
+  border:1.5px solid var(--bdr-dark)!important;
+}
+.gen-btn-copy:hover{background:var(--surf3);border-color:#D46026!important;transform:translateY(-1px);}
+.gen-btn-copy.done{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.35)!important;color:#059669;}
+
+/* ══════════ RESULTS PANEL ══════════ */
+.tool-results{display:flex;flex-direction:column;gap:20px;}
+
+/* Scale table card */
+.result-card{
+  background:var(--surf);border:1.5px solid var(--bdr);border-radius:16px;overflow:hidden;
+}
+.result-card-hdr{
+  padding:15px 20px;background:var(--surf3);
+  border-bottom:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:6px;
+}
+.result-card-title{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:.2px;}
+.result-card-meta{font-size:12px;color:var(--ink3);font-family:var(--mono);}
+
+/* Scale rows */
+.scale-tbl-hdr{
+  display:grid;grid-template-columns:60px 1fr 1fr 100px 1fr;
+  gap:0;padding:9px 16px;
+  background:var(--bg);border-bottom:1px solid var(--bdr);
+}
+.scale-tbl-hdr span{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--ink3);}
+.scale-row{
+  display:grid;grid-template-columns:60px 1fr 1fr 100px 1fr;
+  gap:0;padding:10px 16px;border-bottom:1px solid var(--bdr);
+  align-items:center;transition:background .12s;
+}
+.scale-row:last-child{border-bottom:none;}
+.scale-row:hover{background:var(--bg);}
+.sc-tag{font-family:var(--mono);font-size:12px;font-weight:700;color:#D46026;background:#FFEEDE;padding:4px 8px;border-radius:5px;display:inline-block;}
+.sc-preview{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);font-weight:700;line-height:1.1;}
+.sc-range{font-family:var(--mono);font-size:12px;color:var(--ink3);white-space:nowrap;}
+.sc-clamp{font-family:var(--mono);font-size:11px;color:var(--ink3);word-break:break-all;line-height:1.4;}
+
+/* Fluid preview card */
+.fluid-card-body{padding:20px;}
+.fluid-lvls{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.fl-btn{
+  padding:7px 14px;border-radius:8px;font-size:13px;font-weight:700;
+  font-family:var(--font);cursor:pointer;border:1.5px solid var(--bdr);
+  background:var(--bg);color:var(--ink2);transition:all .12s;
+}
+.fl-btn.on{background:#D46026;color:#fff;border-color:#D46026;}
+.fl-btn:hover:not(.on){border-color:#D46026;color:#D46026;}
+.fluid-vp-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.fluid-vp-label{font-size:14px;font-weight:600;color:var(--ink2);white-space:nowrap;}
+.fluid-vp-sel{flex:1;border:1.5px solid var(--bdr);border-radius:9px;padding:9px 12px;font-family:var(--font);font-size:14px;font-weight:600;color:var(--ink);background:var(--bg);outline:none;cursor:pointer;}
+.fluid-vp-sel:focus{border-color:#D46026;}
+.fluid-sample-box{
+  background:#1A0808;border-radius:12px;padding:22px 24px 18px;
+  min-height:120px;display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.fluid-sample-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(212,96,38,.12),transparent 70%);}
+.fluid-sample-meta{display:flex;align-items:center;gap:10px;margin-bottom:10px;position:relative;}
+.fluid-sample-tag{font-family:var(--mono);font-size:11px;font-weight:700;color:rgba(255,169,93,.8);background:rgba(212,96,38,.15);padding:3px 10px;border-radius:5px;}
+.fluid-sample-sz{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.4);}
+#fluid-sample{color:#fff;font-weight:700;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;position:relative;}
+.fluid-clamp-str{margin-top:12px;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.3);word-break:break-all;line-height:1.45;position:relative;}
+
+/* Script stress card */
+.scripts-card-body{padding:18px 20px;}
+.sc-dd-row{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.sc-dd{flex:1;border:1.5px solid var(--bdr);border-radius:9px;padding:9px 12px;font-family:var(--font);font-size:14px;font-weight:600;color:var(--ink);background:var(--bg);outline:none;cursor:pointer;}
+.sc-dd:focus{border-color:#D46026;}
+.sc-dir-badge{font-size:12px;font-weight:700;padding:5px 11px;border-radius:6px;background:#FFEEDE;color:var(--ink3);white-space:nowrap;}
+.sc-stress-box{
+  background:var(--bg);border:1.5px solid var(--bdr);border-radius:10px;
+  padding:18px;min-height:60px;
+}
+#sc-text-el{font-size:17px;font-weight:500;color:var(--ink);line-height:1.6;}
+.sc-meta-row{margin-top:10px;font-family:var(--mono);font-size:12px;color:var(--ink3);}
+
+/* CSS output card */
+.css-out-wrap{padding:0;}
+.css-out-hdr{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr);flex-wrap:wrap;gap:8px;}
+.css-out-actions{display:flex;gap:7px;}
+.css-action-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 14px;border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;
+  cursor:pointer;border:1.5px solid var(--bdr);background:var(--bg);color:var(--ink);transition:all .15s;
+}
+.css-action-btn:hover{border-color:#D46026;color:#D46026;background:var(--surf3);}
+.css-action-btn.done{border-color:rgba(16,185,129,.4);color:#059669;background:rgba(16,185,129,.07);}
+.css-action-btn.dl{background:#D46026;color:#fff;border-color:#D46026;box-shadow:0 3px 12px rgba(212,96,38,.32);}
+.css-action-btn.dl:hover{background:#B03A10;box-shadow:0 5px 16px rgba(212,96,38,.4);}
+pre#css-out{
+  padding:18px 20px;overflow-x:auto;
+  font-family:var(--mono);font-size:13px;line-height:1.7;
+  background:var(--bg);min-height:80px;
+}
+.c-root{color:var(--ink2);font-weight:600;}
+.c-var{color:#D46026;}
+.c-val{color:var(--ink);}
+
+/* ══════════ HOW IT WORKS ══════════ */
 .how-bg{background:var(--surf);}
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;margin-top:52px;}
-.step{
-  background:var(--bg);border:1.5px solid var(--bdr);
-  border-radius:14px;padding:26px 22px;
-  transition:transform .18s,box-shadow .18s;
-}
+.step{background:var(--bg);border:1.5px solid var(--bdr);border-radius:14px;padding:26px 22px;transition:transform .18s,box-shadow .18s;}
 .step:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(212,96,38,.12);}
-.step-n{
-  width:38px;height:38px;border-radius:9px;background:#D46026;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:800;color:#fff;margin-bottom:14px;
-}
-/* Title Case step h3 */
+.step-n{width:38px;height:38px;border-radius:9px;background:#D46026;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;margin-bottom:14px;}
 .step h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:8px;}
 .step p{font-size:13px;color:var(--ink3);line-height:1.62;}
 
-/* ═══════════════════════════════════════════
-   FEATURES — solid bg2
-════════════════════════════════════════════ */
+/* ══════════ FEATURES ══════════ */
 .feat-bg{background:var(--bg2);}
 .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:52px;}
-.feat{
-  background:var(--surf);border:1.5px solid var(--bdr);
-  border-radius:14px;padding:26px 24px;
-  transition:transform .18s,box-shadow .18s,border-color .18s;
-}
+.feat{background:var(--surf);border:1.5px solid var(--bdr);border-radius:14px;padding:26px 24px;transition:transform .18s,box-shadow .18s,border-color .18s;}
 .feat:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(212,96,38,.12);border-color:rgba(212,96,38,.28);}
 .feat-ico{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
-/* Title Case feat h3 */
 .feat h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:10px;}
 .feat p{font-size:13.5px;color:var(--ink3);line-height:1.62;}
 .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
 .tag{font-family:var(--mono);font-size:10px;font-weight:500;background:#FFEEDE;color:#D46026;padding:3px 9px;border-radius:5px;}
 
-/* ═══════════════════════════════════════════
-   SCALE DEMO — solid white
-════════════════════════════════════════════ */
-.scale-bg{background:var(--surf);}
-.scale-demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start;margin-top:52px;}
-.scale-list{display:flex;flex-direction:column;gap:6px;}
-.scale-item{
-  display:flex;align-items:center;gap:11px;padding:11px 14px;
-  background:var(--bg);border:1.5px solid var(--bdr);border-radius:9px;
-}
-.scale-badge{width:46px;font-family:var(--mono);font-size:9.5px;font-weight:600;color:#D46026;flex-shrink:0;}
-.scale-bar-wrap{flex:1;}
-.scale-bar-lbl{font-family:var(--mono);font-size:8.5px;color:var(--ink3);margin-bottom:4px;}
-.scale-bar-bg{height:5px;background:var(--bdr);border-radius:3px;overflow:hidden;}
-.scale-bar-fill{height:100%;border-radius:3px;background:#D46026;}
-.scale-demo-visual{
-  background:#1A0808;border-radius:18px;padding:26px;
-  display:flex;flex-direction:column;gap:7px;
-}
-.scale-vis-row{
-  display:flex;align-items:baseline;gap:10px;
-  background:rgba(255,255,255,.04);border-radius:7px;
-  padding:9px 12px;border:1px solid rgba(255,255,255,.07);
-}
-.scale-vis-tag{font-family:var(--mono);font-size:8.5px;font-weight:600;color:rgba(255,169,93,.75);min-width:54px;}
-.scale-vis-sample{font-weight:700;color:#fff;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-
-/* ═══════════════════════════════════════════
-   OUTPUTS — solid bg2
-════════════════════════════════════════════ */
-.out-bg{background:var(--bg2);}
+/* ══════════ OUTPUTS ══════════ */
+.out-bg{background:var(--surf);}
 .out-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:52px;}
-.out-card{border-radius:14px;padding:26px 22px;border:1.5px solid var(--bdr);background:var(--surf);transition:transform .18s,box-shadow .18s;}
+.out-card{border-radius:14px;padding:26px 22px;border:1.5px solid var(--bdr);background:var(--bg);transition:transform .18s,box-shadow .18s;}
 .out-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(212,96,38,.12);}
 .out-ext{font-family:var(--mono);font-size:12.5px;font-weight:500;margin-bottom:14px;display:inline-block;padding:4px 11px;border-radius:6px;}
-/* Title Case out-card h3 */
 .out-card h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px;}
 .out-card ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
 .out-card li{font-size:12.5px;color:var(--ink3);display:flex;align-items:flex-start;gap:7px;line-height:1.42;}
 .out-card li::before{content:'→';color:#D46026;font-weight:700;flex-shrink:0;}
 
-/* ═══════════════════════════════════════════
-   SCRIPTS — solid white
-════════════════════════════════════════════ */
-.scripts-bg{background:var(--surf);}
+/* ══════════ SCRIPTS ══════════ */
+.scripts-bg{background:var(--bg2);}
 .scripts-row{display:flex;gap:9px;align-items:flex-end;justify-content:center;flex-wrap:wrap;margin-top:52px;}
-.script-item{
-  display:flex;flex-direction:column;align-items:center;gap:7px;
-  padding:14px 12px;border-radius:11px;
-  background:var(--bg);border:1.5px solid var(--bdr);min-width:78px;
-  transition:transform .18s,box-shadow .18s;
-}
+.script-item{display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 12px;border-radius:11px;background:var(--bg);border:1.5px solid var(--bdr);min-width:78px;transition:transform .18s,box-shadow .18s;}
 .script-item:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(212,96,38,.14);}
 .script-flag{font-size:20px;line-height:1;}
 .script-name{font-size:9.5px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.4px;text-align:center;}
 .script-script{font-family:var(--mono);font-size:9.5px;color:var(--ink3);text-align:center;}
 
-/* ═══════════════════════════════════════════
-   FREE CTA — solid dark
-════════════════════════════════════════════ */
+/* ══════════ FREE CTA ══════════ */
 .free-bg{background:var(--hero-bg);text-align:center;padding:112px 24px;}
 .free-bg .s-chip{background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.18);}
 .free-bg .s-h{color:#fff;}
 .free-bg .s-p{color:rgba(255,255,255,.58);margin:0 auto 44px;}
 .perks{display:flex;flex-wrap:wrap;gap:13px;justify-content:center;margin-top:44px;}
 .perk{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:rgba(255,255,255,.75);}
-.perk-ck{
-  width:21px;height:21px;border-radius:6px;
-  background:rgba(74,222,128,.18);border:1px solid rgba(74,222,128,.38);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
+.perk-ck{width:21px;height:21px;border-radius:6px;background:rgba(74,222,128,.18);border:1px solid rgba(74,222,128,.38);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 
-/* ═══════════════════════════════════════════
-   FOOTER — solid dark, properly aligned
-════════════════════════════════════════════ */
+/* ══════════ FOOTER ══════════ */
 footer{background:#1A0808;padding:52px 24px 0;}
-
-/* Container keeps everything at max-width and centered */
-.ft-inner{
-  max-width:var(--max);
-  margin:0 auto;
-}
-.ft-top{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:32px;
-  padding-bottom:36px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  flex-wrap:wrap;
-}
-.ft-brand{
-  display:flex;flex-direction:column;gap:14px;
-  max-width:440px;
-}
+.ft-inner{max-width:var(--max);margin:0 auto;}
+.ft-top{display:flex;align-items:flex-start;justify-content:space-between;gap:32px;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap;}
+.ft-brand{display:flex;flex-direction:column;gap:14px;max-width:440px;}
 .fb-logo{display:flex;align-items:center;gap:11px;}
-.fb-logo-icon{
-  width:30px;height:28px;background:#D46026;border-radius:6px;
-  display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0;
-}
+.fb-logo-icon{width:30px;height:28px;background:#D46026;border-radius:6px;display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0;}
 .fb-logo-icon svg{width:22px;height:20px;display:block;}
 .fb-name{font-size:15px;font-weight:700;color:#fff;}
 .fb-desc{font-size:13.5px;color:rgba(255,255,255,.38);line-height:1.65;}
 .fb-elustra{display:flex;align-items:center;gap:9px;}
 .fb-elustra-lbl{font-size:11px;color:rgba(255,255,255,.32);font-weight:500;}
-/* Elustra footer logo — visible size */
 .fb-elustra-logo{height:13px;width:auto;display:block;}
-
-/* Footer links column */
 .ft-links{display:flex;flex-direction:column;gap:8px;}
 .ft-link{font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .14s;}
 .ft-link:hover{color:rgba(255,255,255,.8);}
-
-/* Bottom bar */
-.fb-bot{
-  max-width:var(--max);
-  margin:0 auto;
-  padding:18px 0 22px;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:10px;
-}
+.fb-bot{max-width:var(--max);margin:0 auto;padding:18px 0 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
 .fb-copy{font-size:12.5px;color:rgba(255,255,255,.28);}
 
-/* ═══════════════════════════════════════════
-   WHATSAPP STICKY
-════════════════════════════════════════════ */
-.wa-sticky{
-  position:fixed;bottom:24px;right:24px;z-index:200;
-  display:flex;align-items:center;gap:9px;
-  background:#22C55E;color:#fff;text-decoration:none;
-  padding:10px 14px 10px 11px;border-radius:100px;
-  box-shadow:0 4px 18px rgba(34,197,94,.42);
-  transition:transform .18s,box-shadow .18s;
-}
+/* ══════════ WHATSAPP ══════════ */
+.wa-sticky{position:fixed;bottom:24px;right:24px;z-index:200;display:flex;align-items:center;gap:9px;background:#22C55E;color:#fff;text-decoration:none;padding:10px 14px 10px 11px;border-radius:100px;box-shadow:0 4px 18px rgba(34,197,94,.42);transition:transform .18s,box-shadow .18s;}
 .wa-sticky:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(34,197,94,.52);}
 .wa-sticky svg{width:20px;height:20px;flex-shrink:0;}
 .wa-label{display:flex;flex-direction:column;}
 .wa-label-main{font-size:12px;font-weight:700;line-height:1.2;}
 .wa-label-sub{font-size:9.5px;opacity:.8;}
 
-/* ═══════════════════════════════════════════
-   RESPONSIVE
-════════════════════════════════════════════ */
+/* ══════════ RESPONSIVE ══════════ */
+
+/* Tablet landscape + smaller desktop */
+@media(max-width:1100px){
+  .tool-layout{grid-template-columns:340px 1fr;}
+}
+
+/* Tablet portrait */
 @media(max-width:960px){
   nav{padding:0 22px;}
   .nav-links{display:none;}
   .nav-ham{display:flex;}
-  .scale-demo-grid{grid-template-columns:1fr;}
-  .scale-demo-visual{display:none;}
+  .tool-layout{grid-template-columns:1fr;gap:20px;}
+  .tool-panel{position:relative;top:0;}
   .ft-top{flex-direction:column;}
+  section{padding:64px 20px;}
+  .free-bg{padding:80px 20px;}
 }
-@media(max-width:640px){
-  .stats-strip{gap:18px;}
+
+/* Large mobile / small tablet */
+@media(max-width:720px){
+  nav{padding:0 18px;height:58px;}
+  .nav-drawer{top:58px;}
+  .hero{padding:100px 20px 60px;}
+  .stats-strip{gap:20px;}
   .stat-d{display:none;}
+  /* Scale table — hide preview columns, keep tag + range + clamp */
+  .scale-tbl-hdr{grid-template-columns:58px 90px 1fr;}
+  .scale-tbl-hdr span:nth-child(2),.scale-tbl-hdr span:nth-child(3){display:none;}
+  .scale-row{grid-template-columns:58px 90px 1fr;}
+  .scale-row .sc-preview{display:none;}
+  /* Tool panel wider ratio tiles */
+  .ratio-grid{grid-template-columns:repeat(5,1fr);gap:5px;}
+  .ratio-val{font-size:11px;}
+  .ratio-name{font-size:9px;}
+  /* Fluid level buttons wrap nicely */
+  .fluid-lvls{gap:5px;}
+  .fl-btn{padding:6px 11px;font-size:12px;}
+  .feat-grid{grid-template-columns:1fr;}
+  .out-grid{grid-template-columns:1fr;}
+  .steps{grid-template-columns:1fr 1fr;}
+}
+
+/* Mobile */
+@media(max-width:520px){
+  nav{padding:0 16px;}
+  .hero h1{letter-spacing:-1.5px;}
+  .hero-btns{flex-direction:column;align-items:stretch;}
+  .btn-p,.btn-g{justify-content:center;}
+  section{padding:52px 16px;}
+  .free-bg{padding:64px 16px;}
+  .tool-layout{gap:16px;}
+  .tp-section{padding:16px 18px;}
+  .gen-btns{padding:16px 18px;}
+  .steps{grid-template-columns:1fr;}
+  .scripts-row{gap:7px;}
+  .script-item{min-width:68px;padding:12px 8px;}
+  /* Scale table on tiny screens — just tag + clamp */
+  .scale-tbl-hdr{grid-template-columns:58px 1fr;}
+  .scale-tbl-hdr span:nth-child(4){display:none;}
+  .scale-row{grid-template-columns:58px 1fr;}
+  .scale-row .sc-range{display:none;}
   .wa-label-sub{display:none;}
+  .wa-sticky{padding:10px 13px 10px 11px;}
+  .fb-bot{flex-direction:column;align-items:flex-start;}
+  footer{padding:40px 16px 0;}
+}
+
+/* Very small mobile */
+@media(max-width:380px){
+  .ratio-grid{grid-template-columns:repeat(3,1fr);}
+  .ratio-tile:nth-child(4),.ratio-tile:nth-child(5){display:none;}
+  .gen-btn-web{font-size:14px;padding:12px 16px;}
+  .inp-in,.sel-in{font-size:14px;}
+  .hero{padding:90px 16px 52px;}
 }
 </style>
 </head>
@@ -391,7 +435,6 @@ footer{background:#1A0808;padding:52px 24px 0;}
 <nav>
   <a class="nav-logo" href="#">
     <div class="nav-logo-icon">
-      <!-- Full ClampType SVG — left bracket, right bracket, T crossbar -->
       <svg viewBox="0 0 78 74" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M20.9233 6.75L20.9409 6.98047L21.2671 11.2109L21.2876 11.4795H21.0181C18.5728 11.4795 16.7978 12.0161 15.646 13.043L15.645 13.0439C14.5193 14.0435 13.7603 15.4242 13.3784 17.2041C13.0351 19.0063 12.8628 21.0491 12.8628 23.334V50.666C12.8628 52.9068 13.035 54.9497 13.3784 56.7959L13.4546 57.125C13.8568 58.7469 14.5897 60.019 15.645 60.9561L15.646 60.957C16.7978 61.9839 18.5728 62.5205 21.0181 62.5205H21.2876L21.2671 62.7891L20.9409 67.0195L20.9233 67.25H20.6919C17.2821 67.25 14.5835 66.7052 12.6196 65.5908V65.5898C10.691 64.5141 9.30913 62.7695 8.46729 60.3799C7.63076 58.0052 7.12892 54.8978 6.95459 51.0674C6.78062 47.2013 6.69385 42.512 6.69385 37C6.69385 31.4448 6.78062 26.7554 6.95459 22.9326C7.12892 19.1022 7.63076 15.9948 8.46729 13.6201C9.3094 11.2297 10.692 9.48382 12.6216 8.4082C14.5853 7.29455 17.2832 6.75002 20.6919 6.75H20.9233Z" fill="white"/>
         <path d="M57.1958 6.75C60.6014 6.75002 63.2774 7.29382 65.1987 8.40723C67.172 9.48219 68.5776 11.2279 69.4204 13.6201C70.2569 15.9948 70.7588 19.1022 70.9331 22.9326C71.1071 26.7554 71.1938 31.4448 71.1938 37C71.1938 42.512 71.1071 47.2013 70.9331 51.0674C70.7588 54.8978 70.2569 58.0052 69.4204 60.3799C68.5777 62.772 67.1728 64.5178 65.1997 65.5928L65.1987 65.5918C63.2774 66.7054 60.6017 67.25 57.1958 67.25H56.9644L56.9468 67.0195L56.6206 62.7891L56.6001 62.5205H56.8696C59.3609 62.5205 61.1325 61.983 62.2388 60.96L62.2427 60.9561C63.3668 59.958 64.1037 58.5795 64.4429 56.8018L64.4438 56.7969L64.5796 56.0957C64.876 54.4373 65.0249 52.6277 65.0249 50.666V23.334C65.0249 21.0484 64.8304 19.0055 64.4438 17.2041L64.4429 17.1982C64.1037 15.4205 63.3668 14.042 62.2427 13.0439L62.2388 13.04C61.1325 12.017 59.3609 11.4795 56.8696 11.4795H56.6001L56.6206 11.2109L56.9468 6.98047L56.9644 6.75H57.1958Z" fill="white"/>
@@ -401,12 +444,13 @@ footer{background:#1A0808;padding:52px 24px 0;}
     <span class="nav-name">ClampType</span>
   </a>
   <div class="nav-links">
+    <a class="nav-link" href="#generator">Web Generator</a>
     <a class="nav-link" href="#how">How It Works</a>
     <a class="nav-link" href="#features">Features</a>
     <a class="nav-link" href="#outputs">Outputs</a>
     <a class="nav-link" href="#scripts">Scripts</a>
     <a class="nav-link nav-cta" href="https://www.figma.com/community/plugin/1612318883144152924" target="_blank">
-      Install — Free
+      Install on Figma — Free
     </a>
   </div>
   <button class="nav-ham" id="ham" onclick="toggleMenu()" aria-label="Menu">
@@ -415,6 +459,7 @@ footer{background:#1A0808;padding:52px 24px 0;}
 </nav>
 
 <div class="nav-drawer" id="drawer">
+  <a class="nav-link" href="#generator" onclick="closeMenu()">Web Generator</a>
   <a class="nav-link" href="#how" onclick="closeMenu()">How It Works</a>
   <a class="nav-link" href="#features" onclick="closeMenu()">Features</a>
   <a class="nav-link" href="#outputs" onclick="closeMenu()">Outputs</a>
@@ -424,7 +469,6 @@ footer{background:#1A0808;padding:52px 24px 0;}
 
 <!-- ═══ HERO ═══ -->
 <section class="hero">
-  <!-- Presented by Elustra — larger logo, all 7 paths white -->
   <div class="presented-by">
     <span class="presented-by-txt">Presented by</span>
     <svg class="elustra-hero" viewBox="0 0 275 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Elustra">
@@ -438,21 +482,20 @@ footer{background:#1A0808;padding:52px 24px 0;}
     </svg>
   </div>
 
-  <div class="eyebrow"><span class="dot"></span> Free Figma Plugin · Zero API · Zero Limits</div>
+  <div class="eyebrow"><span class="dot"></span> Free Forever · No Figma Required · No API Keys</div>
 
-  <!-- Title Case headline -->
   <h1>Fluid Typography<br>Done <span>Mathematically Right</span></h1>
   <p class="hero-sub">
-    ClampType generates perfect CSS <code style="background:rgba(255,255,255,.11);padding:2px 7px;border-radius:5px;font-family:var(--mono)">clamp()</code> scales from H1 to Caption — then creates Figma Variables and a canvas frame in one click. 20+ global scripts. Zero config.
+    Generate perfect CSS <code style="background:rgba(255,255,255,.11);padding:2px 7px;border-radius:5px;font-family:var(--mono)">clamp()</code> scales directly in your browser — or use the Figma plugin for Variables and canvas frames. 9 levels, 20+ global scripts, instant CSS download.
   </p>
   <div class="hero-btns">
-    <a class="btn-p" href="https://www.figma.com/community/plugin/1612318883144152924" target="_blank">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-      Install on Figma — Free
+    <a class="btn-p" href="#generator">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+      Open Web Generator
     </a>
-    <a class="btn-g" href="#how">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      How It Works
+    <a class="btn-g" href="https://www.figma.com/community/plugin/1612318883144152924" target="_blank">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+      Install on Figma
     </a>
   </div>
 
@@ -467,12 +510,190 @@ footer{background:#1A0808;padding:52px 24px 0;}
   </div>
 </section>
 
+<!-- ═══ WEB GENERATOR ═══ -->
+<section class="tool-bg" id="generator">
+  <div class="container">
+    <div class="s-chip">Web Generator</div>
+    <h2 class="s-h">Generate Your Scale — <span>No Figma Needed</span></h2>
+    <p class="s-p">Configure your scale below, preview all 9 levels live, test global scripts, then download a ready-to-use CSS file.</p>
+
+    <div class="tool-layout">
+
+      <!-- LEFT: Controls panel -->
+      <div class="tool-panel">
+        <div class="tool-panel-hdr">
+          <div class="tool-panel-hdr-icon">
+            <svg viewBox="0 0 78 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.9233 6.75L20.9409 6.98047L21.2671 11.2109L21.2876 11.4795H21.0181C18.5728 11.4795 16.7978 12.0161 15.646 13.043L15.645 13.0439C14.5193 14.0435 13.7603 15.4242 13.3784 17.2041C13.0351 19.0063 12.8628 21.0491 12.8628 23.334V50.666C12.8628 52.9068 13.035 54.9497 13.3784 56.7959L13.4546 57.125C13.8568 58.7469 14.5897 60.019 15.645 60.9561L15.646 60.957C16.7978 61.9839 18.5728 62.5205 21.0181 62.5205H21.2876L21.2671 62.7891L20.9409 67.0195L20.9233 67.25H20.6919C17.2821 67.25 14.5835 66.7052 12.6196 65.5908V65.5898C10.691 64.5141 9.30913 62.7695 8.46729 60.3799C7.63076 58.0052 7.12892 54.8978 6.95459 51.0674C6.78062 47.2013 6.69385 42.512 6.69385 37C6.69385 31.4448 6.78062 26.7554 6.95459 22.9326C7.12892 19.1022 7.63076 15.9948 8.46729 13.6201C9.3094 11.2297 10.692 9.48382 12.6216 8.4082C14.5853 7.29455 17.2832 6.75002 20.6919 6.75H20.9233Z" fill="white"/>
+              <path d="M57.1958 6.75C60.6014 6.75002 63.2774 7.29382 65.1987 8.40723C67.172 9.48219 68.5776 11.2279 69.4204 13.6201C70.2569 15.9948 70.7588 19.1022 70.9331 22.9326C71.1071 26.7554 71.1938 31.4448 71.1938 37C71.1938 42.512 71.1071 47.2013 70.9331 51.0674C70.7588 54.8978 70.2569 58.0052 69.4204 60.3799C68.5777 62.772 67.1728 64.5178 65.1997 65.5928L65.1987 65.5918C63.2774 66.7054 60.6017 67.25 57.1958 67.25H56.9644L56.9468 67.0195L56.6206 62.7891L56.6001 62.5205H56.8696C59.3609 62.5205 61.1325 61.983 62.2388 60.96L62.2427 60.9561C63.3668 59.958 64.1037 58.5795 64.4429 56.8018L64.4438 56.7969L64.5796 56.0957C64.876 54.4373 65.0249 52.6277 65.0249 50.666V23.334C65.0249 21.0484 64.8304 19.0055 64.4438 17.2041L64.4429 17.1982C64.1037 15.4205 63.3668 14.042 62.2427 13.0439L62.2388 13.04C61.1325 12.017 59.3609 11.4795 56.8696 11.4795H56.6001L56.6206 11.2109L56.9468 6.98047L56.9644 6.75H57.1958Z" fill="white"/>
+              <path d="M51.5562 13.9082V18.9639H41.978V59.9619H35.8745V18.9639H26.2964V13.9082H51.5562Z" fill="white"/>
+            </svg>
+          </div>
+          <div>
+            <div class="tph-name">ClampType Controls</div>
+            <div class="tph-sub" id="scale-info">320 → 1440px</div>
+          </div>
+        </div>
+
+        <!-- Ratio -->
+        <div class="tp-section">
+          <div class="tp-label">Scale Ratio</div>
+          <div class="ratio-grid">
+            <div class="ratio-tile" data-ratio="1.125" onclick="setRatio(this)"><span class="ratio-val">1.125</span><span class="ratio-name">Minor 2nd</span></div>
+            <div class="ratio-tile" data-ratio="1.200" onclick="setRatio(this)"><span class="ratio-val">1.200</span><span class="ratio-name">Minor 3rd</span></div>
+            <div class="ratio-tile on" data-ratio="1.250" onclick="setRatio(this)"><span class="ratio-val">1.250</span><span class="ratio-name">Major 3rd</span></div>
+            <div class="ratio-tile" data-ratio="1.333" onclick="setRatio(this)"><span class="ratio-val">1.333</span><span class="ratio-name">Perfect 4th</span></div>
+            <div class="ratio-tile" data-ratio="1.500" onclick="setRatio(this)"><span class="ratio-val">1.500</span><span class="ratio-name">Perfect 5th</span></div>
+          </div>
+        </div>
+
+        <!-- Base & Custom ratio -->
+        <div class="tp-section">
+          <div class="tp-label">Base Size &amp; Custom Ratio</div>
+          <div class="inp-row">
+            <span class="inp-label">Base</span>
+            <input class="inp-in" id="base" type="number" value="16" min="10" max="32" step="1" oninput="recalc()">
+            <span class="inp-unit">px</span>
+          </div>
+          <div class="inp-row">
+            <span class="inp-label">Ratio</span>
+            <input class="inp-in" id="ratio" type="number" value="1.25" min="1.05" max="2.5" step="0.001" oninput="onRatioInput()">
+          </div>
+          <div class="inp-hint">Base (<span id="hint-base">16px</span>) = H5 / Body / CTA minimum — the smallest font size in your UI.</div>
+        </div>
+
+        <!-- Viewport -->
+        <div class="tp-section">
+          <div class="tp-label">Viewport Range</div>
+          <div class="inp-row">
+            <span class="inp-label">Min VP</span>
+            <select class="sel-in" id="vp-min" onchange="recalc()">
+              <option value="240">240px — Tiny</option>
+              <option value="320" selected>320px — Mobile</option>
+              <option value="375">375px — iPhone SE</option>
+              <option value="390">390px — iPhone 14</option>
+              <option value="414">414px — Plus</option>
+            </select>
+          </div>
+          <div class="inp-row">
+            <span class="inp-label">Max VP</span>
+            <select class="sel-in" id="vp-max" onchange="recalc()">
+              <option value="1024">1024px — iPad Pro</option>
+              <option value="1280">1280px — Laptop</option>
+              <option value="1440" selected>1440px — Desktop L</option>
+              <option value="1600">1600px — Wide</option>
+              <option value="1920">1920px — FHD</option>
+              <option value="2560">2560px — 4K</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Preview text -->
+        <div class="tp-section">
+          <div class="tp-label">Preview Text</div>
+          <input class="custom-text-input" id="custom-text" type="text" placeholder="Type your text — previews everywhere…" oninput="onCustomText()">
+        </div>
+
+        <!-- Generate buttons -->
+        <div class="gen-btns">
+          <button class="gen-btn-web gen-btn-dl" onclick="downloadCSS()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download CSS File
+          </button>
+          <button class="gen-btn-web gen-btn-copy" id="copy-btn-main" onclick="copyCSSMain()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy CSS to Clipboard
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT: Results -->
+      <div class="tool-results">
+
+        <!-- Scale table -->
+        <div class="result-card">
+          <div class="result-card-hdr">
+            <span class="result-card-title">Type Scale — 9 Levels</span>
+            <span class="result-card-meta" id="tbl-meta">Base 16px · Ratio 1.250</span>
+          </div>
+          <div class="scale-tbl-hdr">
+            <span>Level</span><span>Min</span><span>Max</span><span>Range</span><span>clamp()</span>
+          </div>
+          <div id="scale-rows"></div>
+        </div>
+
+        <!-- Fluid preview -->
+        <div class="result-card">
+          <div class="result-card-hdr">
+            <span class="result-card-title">Fluid Preview</span>
+            <span class="result-card-meta">Live at any viewport</span>
+          </div>
+          <div class="fluid-card-body">
+            <div class="fluid-lvls" id="fluid-lvls"></div>
+            <div class="fluid-vp-row">
+              <span class="fluid-vp-label">Viewport</span>
+              <select class="fluid-vp-sel" id="fluid-vp" onchange="renderFluidPreview()"></select>
+            </div>
+            <div class="fluid-sample-box">
+              <div class="fluid-sample-meta">
+                <span class="fluid-sample-tag" id="fluid-lbl">H1</span>
+                <span class="fluid-sample-sz" id="fluid-sz">—</span>
+              </div>
+              <div id="fluid-sample">ClampType</div>
+              <div class="fluid-clamp-str" id="fluid-clamp">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Script stress test -->
+        <div class="result-card">
+          <div class="result-card-hdr">
+            <span class="result-card-title">Script Stress Test</span>
+            <span class="result-card-meta">20+ global writing systems</span>
+          </div>
+          <div class="scripts-card-body">
+            <div class="sc-dd-row">
+              <select class="sc-dd" id="scripts-dd" onchange="onScriptChange()"></select>
+              <span class="sc-dir-badge" id="sc-dir-badge">LTR</span>
+            </div>
+            <div class="sc-stress-box">
+              <div id="sc-text-el" dir="ltr"></div>
+            </div>
+            <div class="sc-meta-row" id="sc-meta-el"></div>
+          </div>
+        </div>
+
+        <!-- CSS Output -->
+        <div class="result-card">
+          <div class="css-out-wrap">
+            <div class="css-out-hdr">
+              <span class="result-card-title">CSS Output</span>
+              <div class="css-out-actions">
+                <button class="css-action-btn" id="copy-btn-css" onclick="copyCSSInline()">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Copy
+                </button>
+                <button class="css-action-btn dl" onclick="downloadCSS()">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Download .css
+                </button>
+              </div>
+            </div>
+            <pre id="css-out"></pre>
+          </div>
+        </div>
+
+      </div><!-- /tool-results -->
+    </div><!-- /tool-layout -->
+  </div>
+</section>
+
 <!-- ═══ HOW IT WORKS ═══ -->
 <section class="how-bg" id="how">
   <div class="container">
     <div class="s-chip">How It Works</div>
     <h2 class="s-h">Perfect Scales in <span>Four Steps</span></h2>
-    <p class="s-p">Pure math. No guesswork. No CSS headaches. ClampType runs entirely inside Figma — your data never leaves your machine.</p>
+    <p class="s-p">Pure math. No guesswork. No CSS headaches. Use the web generator above — or the Figma plugin for Variables and canvas frames.</p>
     <div class="steps">
       <div class="step">
         <div class="step-n">1</div>
@@ -482,7 +703,7 @@ footer{background:#1A0808;padding:52px 24px 0;}
       <div class="step">
         <div class="step-n">2</div>
         <h3>Set Base &amp; Viewport</h3>
-        <p>Enter your base size (smallest UI size — body/caption level) and viewport range. ClampType computes fluid min and max for every level from H1 down to Caption and CTA.</p>
+        <p>Enter your base size and viewport range. ClampType computes fluid min and max for every level from H1 down to Caption and CTA using the modular scale formula.</p>
       </div>
       <div class="step">
         <div class="step-n">3</div>
@@ -491,8 +712,8 @@ footer{background:#1A0808;padding:52px 24px 0;}
       </div>
       <div class="step">
         <div class="step-n">4</div>
-        <h3>Generate &amp; Ship</h3>
-        <p>One click creates Figma Number Variables (fs/h1 → fs/caption), a canvas documentation frame with all clamp() values, and a ready-to-paste CSS :root block with all 9 classes.</p>
+        <h3>Download &amp; Ship</h3>
+        <p>One click downloads a complete CSS file with all :root variables and class definitions — or paste to your project directly. Also available as Figma Variables on the plugin.</p>
       </div>
     </div>
   </div>
@@ -503,9 +724,8 @@ footer{background:#1A0808;padding:52px 24px 0;}
   <div class="container">
     <div class="s-chip">Full Feature List</div>
     <h2 class="s-h">Everything Fluid Typography <span>Needs</span></h2>
-    <p class="s-p">Nine type levels, five ratio presets, 20+ scripts, live preview, Figma Variables, canvas frames, and complete CSS output — all free.</p>
+    <p class="s-p">Nine type levels, six ratio presets, 20+ scripts, live preview, and complete CSS output — all free, all in your browser.</p>
     <div class="feat-grid">
-
       <div class="feat">
         <div class="feat-ico" style="background:#FFF2E8;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
@@ -514,84 +734,45 @@ footer{background:#1A0808;padding:52px 24px 0;}
         <p>H1 through H6, Body, Caption, and CTA — every level computed as a fluid clamp() value. Line heights, font weights, and letter spacing included in CSS output.</p>
         <div class="tags"><span class="tag">H1–H6</span><span class="tag">Body</span><span class="tag">Caption</span><span class="tag">CTA</span></div>
       </div>
-
       <div class="feat">
         <div class="feat-ico" style="background:#FFF2E8;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
         <h3>Modular Scale Math</h3>
-        <p>Formula: <code style="background:#FFEEDE;padding:1px 5px;border-radius:3px;font-family:var(--mono);font-size:11px">Sₙ = Base × Ratioⁿ</code>. Five classic ratios plus custom input. Perfect Fifth, Perfect Fourth, Major Third — your type, your choice.</p>
+        <p>Formula: <code style="background:#FFEEDE;padding:1px 5px;border-radius:3px;font-family:var(--mono);font-size:11px">Sₙ = Base × Ratioⁿ</code>. Six ratio presets plus custom input. Minor Second to Perfect Fifth — your type, your choice.</p>
         <div class="tags"><span class="tag">1.125</span><span class="tag">1.25</span><span class="tag">1.333</span><span class="tag">1.5</span></div>
       </div>
-
-      <div class="feat">
-        <div class="feat-ico" style="background:#FFF2E8;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        </div>
-        <h3>Figma Variables Output</h3>
-        <p>Creates a "ClampType / Typography Scale" collection with one Number Variable per level (fs/h1 … fs/caption). Variables carry min/max px values, descriptions, and code syntax for Web, Android, and iOS.</p>
-        <div class="tags"><span class="tag">Number vars</span><span class="tag">Code syntax</span><span class="tag">FONT_SIZE scope</span></div>
-      </div>
-
-      <div class="feat">
-        <div class="feat-ico" style="background:#FFF2E8;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h16M9 4v16"/></svg>
-        </div>
-        <h3>Canvas Documentation Frame</h3>
-        <p>Generates a 1280px Figma frame with a scale table showing every level — tag, px range, clamp() value, and live Aa sample at min size — plus a dark CSS block at the bottom.</p>
-        <div class="tags"><span class="tag">1280px frame</span><span class="tag">Scale table</span><span class="tag">CSS block</span></div>
-      </div>
-
       <div class="feat">
         <div class="feat-ico" style="background:#FFF2E8;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M16.24 7.76l-2.12 2.12M5.64 18.36l2.12-2.12"/></svg>
         </div>
         <h3>Live Fluid Preview</h3>
-        <p>Select any breakpoint from 320–1920px to see H1 (or any level) resize fluidly in real time. Instantly see the exact computed px size at any viewport width, with the full clamp() string displayed below.</p>
+        <p>Select any breakpoint from 320–1920px to see any type level resize fluidly in real time. Instantly see the exact computed px size at any viewport width.</p>
         <div class="tags"><span class="tag">Live resize</span><span class="tag">320–1920px</span><span class="tag">Real-time</span></div>
       </div>
-
       <div class="feat">
         <div class="feat-ico" style="background:#FFF2E8;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         </div>
         <h3>20+ Script Stress Test</h3>
-        <p>Test your scale with Latin, Arabic, Hebrew, Farsi, Hindi, Marathi, Tamil, Telugu, Kannada, Malayalam, Gujarati, Bengali, Punjabi, Odia, Chinese, Japanese, Korean, Thai, Greek, Cyrillic, and Emoji. RTL support included.</p>
+        <p>Test your scale with Latin, Arabic, Hebrew, Hindi, Tamil, Telugu, Kannada, Malayalam, Gujarati, Bengali, Chinese, Japanese, Korean, Thai, Greek, Cyrillic, and Emoji. RTL support included.</p>
         <div class="tags"><span class="tag">Indian scripts</span><span class="tag">RTL</span><span class="tag">CJK</span><span class="tag">20+ langs</span></div>
       </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SCALE DEMO ═══ -->
-<section class="scale-bg" id="scale">
-  <div class="container">
-    <div class="s-chip">Scale Preview</div>
-    <h2 class="s-h">Nine Levels, <span>One Mathematical System</span></h2>
-    <p class="s-p">Every level computed from the same base and ratio. The scale stays harmonious at every viewport width.</p>
-    <div class="scale-demo-grid">
-      <div class="scale-list">
-        <div class="scale-item"><span class="scale-badge">H1</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">56 – 96px · exp ×5</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:95%"></div></div></div></div>
-        <div class="scale-item"><span class="scale-badge">H2</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">45 – 76px · exp ×4</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:76%"></div></div></div></div>
-        <div class="scale-item"><span class="scale-badge">H3</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">36 – 61px · exp ×3</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:60%"></div></div></div></div>
-        <div class="scale-item"><span class="scale-badge">H4</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">29 – 49px · exp ×2</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:48%"></div></div></div></div>
-        <div class="scale-item"><span class="scale-badge">H5</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">23 – 39px · exp ×1</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:38%"></div></div></div></div>
-        <div class="scale-item"><span class="scale-badge">H6</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">16 – 27px · base</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:27%"></div></div></div></div>
-        <div class="scale-item"><span class="scale-badge">Body</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">14 – 22px · exp –1</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:22%"></div></div></div></div>
-        <div class="scale-item"><span class="scale-badge">Caption</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">11 – 18px · exp –2</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:17%"></div></div></div></div>
-        <div class="scale-item"><span class="scale-badge">CTA</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">16 – 27px · same as H6</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:27%"></div></div></div></div>
+      <div class="feat">
+        <div class="feat-ico" style="background:#FFF2E8;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <h3>CSS File Download</h3>
+        <p>One click downloads a complete, production-ready CSS file with a :root block containing all 9 --fs-* custom properties plus utility class definitions. Copy or download.</p>
+        <div class="tags"><span class="tag">:root vars</span><span class="tag">.h1–.caption</span><span class="tag">Instant download</span></div>
       </div>
-      <div class="scale-demo-visual">
-        <div style="font-size:8.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,169,93,.5);margin-bottom:5px;font-family:var(--mono)">Live Scale · Major Third · Base 16px</div>
-        <div class="scale-vis-row"><span class="scale-vis-tag">H1</span><span class="scale-vis-sample" style="font-size:34px">ClampType</span></div>
-        <div class="scale-vis-row"><span class="scale-vis-tag">H2</span><span class="scale-vis-sample" style="font-size:27px">Typography Scale</span></div>
-        <div class="scale-vis-row"><span class="scale-vis-tag">H3</span><span class="scale-vis-sample" style="font-size:22px">Fluid &amp; Responsive</span></div>
-        <div class="scale-vis-row"><span class="scale-vis-tag">H4</span><span class="scale-vis-sample" style="font-size:17px">Mathematical Ratios</span></div>
-        <div class="scale-vis-row"><span class="scale-vis-tag">H5</span><span class="scale-vis-sample" style="font-size:14px">Figma Variables Included</span></div>
-        <div class="scale-vis-row"><span class="scale-vis-tag">H6</span><span class="scale-vis-sample" style="font-size:12px">Ready-to-Paste CSS clamp()</span></div>
-        <div class="scale-vis-row"><span class="scale-vis-tag">Body</span><span class="scale-vis-sample" style="font-size:10px;font-weight:400;opacity:0.82">The quick brown fox jumps over the lazy dog</span></div>
-        <div class="scale-vis-row"><span class="scale-vis-tag">Caption</span><span class="scale-vis-sample" style="font-size:8.5px;font-weight:400;opacity:0.6">12 Aug 2026 · Created with ClampType by Elustra</span></div>
+      <div class="feat">
+        <div class="feat-ico" style="background:#FFF2E8;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <h3>Figma Plugin — Variables + Frame</h3>
+        <p>Install the free Figma plugin for Variables output — a ClampType collection with Number Variables per level, FONT_SIZE scope, and a 1280px canvas documentation frame.</p>
+        <div class="tags"><span class="tag">Number vars</span><span class="tag">Canvas frame</span><span class="tag">Code syntax</span></div>
       </div>
     </div>
   </div>
@@ -601,12 +782,23 @@ footer{background:#1A0808;padding:52px 24px 0;}
 <section class="out-bg" id="outputs">
   <div class="container">
     <div class="s-chip">What You Get</div>
-    <h2 class="s-h">Three Outputs, <span>One Click</span></h2>
+    <h2 class="s-h">Three Output Formats, <span>Zero Config</span></h2>
     <p class="s-p">Every run automatically produces all three output formats. Copy, apply, or download — instantly.</p>
     <div class="out-grid">
       <div class="out-card">
+        <div class="out-ext" style="background:#FFF2E8;color:#D46026">.css</div>
+        <h3>CSS File — Web Generator</h3>
+        <ul>
+          <li>:root block with all 9 --fs-* vars</li>
+          <li>Full clamp() string per variable</li>
+          <li>Utility classes .h1 → .caption</li>
+          <li>Line-height + font-weight per class</li>
+          <li>Download in one click, no signup</li>
+        </ul>
+      </div>
+      <div class="out-card">
         <div class="out-ext" style="background:#FFF2E8;color:#D46026">.fig</div>
-        <h3>Figma Variables</h3>
+        <h3>Figma Variables — Plugin</h3>
         <ul>
           <li>ClampType / Typography Scale collection</li>
           <li>One Number Variable per type level</li>
@@ -617,24 +809,13 @@ footer{background:#1A0808;padding:52px 24px 0;}
       </div>
       <div class="out-card">
         <div class="out-ext" style="background:#FFF2E8;color:#D46026">.fig</div>
-        <h3>Canvas Frame</h3>
+        <h3>Canvas Frame — Plugin</h3>
         <ul>
           <li>1280px documentation frame</li>
           <li>Scale table with all 9 levels</li>
           <li>px range + clamp() per row</li>
           <li>Live Aa sample at min size</li>
           <li>Dark CSS :root block at bottom</li>
-        </ul>
-      </div>
-      <div class="out-card">
-        <div class="out-ext" style="background:#FFF2E8;color:#D46026">.css</div>
-        <h3>CSS Variables</h3>
-        <ul>
-          <li>:root block with all 9 --fs-* vars</li>
-          <li>Class definitions .h1 → .caption</li>
-          <li>Line-height + font-weight per class</li>
-          <li>Letter-spacing for CTA class</li>
-          <li>Copy to clipboard in one click</li>
         </ul>
       </div>
     </div>
@@ -670,19 +851,23 @@ footer{background:#1A0808;padding:52px 24px 0;}
   <div class="container">
     <div class="s-chip">100% Free · Forever</div>
     <h2 class="s-h">No Subscriptions.<br>No API Keys. No Limits.</h2>
-    <p class="s-p">ClampType runs entirely inside Figma's sandbox. Your data never leaves your machine. Generate unlimited type scales, forever.</p>
+    <p class="s-p">Use the web generator right now — no signup, no account, no figma required. Or install the Figma plugin for Variables and canvas frame output.</p>
     <div class="hero-btns">
-      <a class="btn-p" href="https://www.figma.com/community/plugin/1612318883144152924" target="_blank">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+      <a class="btn-p" href="#generator">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+        Open Web Generator
+      </a>
+      <a class="btn-g" href="https://www.figma.com/community/plugin/1612318883144152924" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
         Install on Figma — Free
       </a>
     </div>
     <div class="perks">
       <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>Zero API Keys</div>
-      <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>Runs Inside Figma Sandbox</div>
+      <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>Works Without Figma</div>
       <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>No Data Collection</div>
       <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>Unlimited Generations</div>
-      <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>Free Forever</div>
+      <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>Download CSS Instantly</div>
     </div>
   </div>
 </section>
@@ -691,7 +876,6 @@ footer{background:#1A0808;padding:52px 24px 0;}
 <footer>
   <div class="ft-inner">
     <div class="ft-top">
-      <!-- Brand column -->
       <div class="ft-brand">
         <div class="fb-logo">
           <div class="fb-logo-icon">
@@ -703,10 +887,9 @@ footer{background:#1A0808;padding:52px 24px 0;}
           </div>
           <span class="fb-name">ClampType</span>
         </div>
-        <p class="fb-desc">Free fluid typography scale generator for Figma. Generate mathematically perfect CSS clamp() scales, Figma Variables, and canvas frames — 9 type levels, 20+ global scripts, zero API.</p>
+        <p class="fb-desc">Free fluid typography scale generator — use in your browser or install the Figma plugin. Generate mathematically perfect CSS clamp() scales, 9 type levels, 20+ global scripts, zero API.</p>
         <div class="fb-elustra">
           <span class="fb-elustra-lbl">Presented by</span>
-          <!-- Elustra footer — all 7 paths, white, readable size -->
           <svg class="fb-elustra-logo" viewBox="0 0 275 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Elustra">
             <path d="M15.1085 25.5591L34.8545 25.2343V32.1673L15.1085 31.8425V50.4685H31.9209L36.7953 49.5837L38.7473 42.4827L42.8094 42.0795C42.753 43.0987 42.6965 44.174 42.6514 45.3052C42.595 46.2684 42.5386 47.3101 42.4934 48.4077C42.437 49.5053 42.4145 50.6029 42.4145 51.6782C42.4145 52.5966 42.437 53.5486 42.4934 54.5455C42.5499 55.5423 42.6063 56.4159 42.6514 57.1663C42.7078 58.1296 42.753 59.0704 42.8094 59.9888L38.7473 59.5072L38.4201 58.4544C38.2621 58.1296 38.0365 57.8719 37.7657 57.6927C37.4949 57.5023 37.2015 57.4127 36.8743 57.4127H0.0789841L0.485188 53.3806L5.1114 51.5214L6.65723 47.6461V9.43065C6.65723 9.16185 6.58953 8.89304 6.45413 8.62423C6.31873 8.35542 6.05921 8.16502 5.68685 8.06422L0.406204 6.60818L0 2.57607H33.6359C33.9632 2.57607 34.2565 2.49767 34.5273 2.32966C34.7981 2.17286 35.0125 1.90405 35.1818 1.52324L35.43 0.470413L39.492 -0.0112C39.4356 0.851223 39.3792 1.71365 39.3341 2.56487C39.2777 3.25929 39.2212 4.06571 39.1761 4.98413C39.131 5.90256 39.0971 6.80978 39.0971 7.72821C39.0971 8.80344 39.1197 9.87866 39.1761 10.9539C39.2325 12.0291 39.2889 13.0259 39.3341 13.9332C39.3905 14.8964 39.4469 15.8708 39.492 16.8341L35.43 16.4308L33.478 10.3827L28.6035 9.49785H15.9209L15.1085 13.3732V25.5591Z" fill="rgba(255,255,255,0.55)"/>
             <path d="M57.9287 7.90741C57.9287 7.42579 57.8159 7.05618 57.6015 6.82098C57.3871 6.57457 56.9809 6.46257 56.3829 6.46257H52.5691L52.1629 3.31528L63.1191 0.156799L67.5084 2.32966L66.1318 9.99066V50.4797C66.1318 50.8045 66.2221 51.107 66.4139 51.4094C66.6057 51.7006 66.8652 51.9022 67.1812 52.0142L72.3038 53.3806L72.71 57.4127C71.2432 57.3567 69.7876 57.2783 68.3208 57.1663C67.0796 57.1663 65.8046 57.1439 64.507 57.0879C63.2094 57.0319 62.0923 57.0095 61.1784 57.0095C60.2644 57.0095 59.1925 57.0319 57.9739 57.0879C56.7553 57.1439 55.5818 57.1663 54.4422 57.1663C53.201 57.2783 51.8921 57.3567 50.5381 57.4127L50.9443 53.3806L57.0373 51.443L57.9287 46.6044V7.90741Z" fill="rgba(255,255,255,0.55)"/>
@@ -718,8 +901,8 @@ footer{background:#1A0808;padding:52px 24px 0;}
           </svg>
         </div>
       </div>
-      <!-- Quick links column -->
       <div class="ft-links">
+        <a class="ft-link" href="#generator">Web Generator</a>
         <a class="ft-link" href="#how">How It Works</a>
         <a class="ft-link" href="#features">Features</a>
         <a class="ft-link" href="#outputs">Outputs</a>
@@ -728,7 +911,6 @@ footer{background:#1A0808;padding:52px 24px 0;}
         <a class="ft-link" href="https://wa.me/918888241144" target="_blank">Contact Us</a>
       </div>
     </div>
-    <!-- Bottom copyright bar -->
     <div class="fb-bot">
       <span class="fb-copy">© Copyright Elustra 2026 | Mithil Mogare · All rights reserved</span>
     </div>
@@ -747,6 +929,314 @@ footer{background:#1A0808;padding:52px 24px 0;}
 </a>
 
 <script>
+var S={base:16,ratio:1.25,vpMin:320,vpMax:1440,fluidLevel:0,scale:[],customText:''};
+
+var LEVELS=[
+  {name:'fs/h1',tag:'H1',exp:4},{name:'fs/h2',tag:'H2',exp:3},{name:'fs/h3',tag:'H3',exp:2},
+  {name:'fs/h4',tag:'H4',exp:1},{name:'fs/h5',tag:'H5',exp:0},{name:'fs/h6',tag:'H6',exp:-1},
+  {name:'fs/body',tag:'Body',exp:-1},{name:'fs/caption',tag:'Caption',exp:-2},{name:'fs/cta',tag:'CTA',exp:0}
+];
+
+var SCRIPTS=[
+  {id:'en',label:'English',sys:'Latin',dir:'ltr',def:'The quick brown fox jumps over the lazy dog. Typography speaks before words do.'},
+  {id:'de',label:'German',sys:'Latin+',dir:'ltr',def:'Donaudampfschifffahrtsgesellschaftskapitän — Typografie spricht, bevor Worte es tun.'},
+  {id:'fr',label:'French',sys:'Latin',dir:'ltr',def:"La typographie parle avant que les mots ne soient lus. Une belle mise en page séduit d'emblée."},
+  {id:'es',label:'Spanish',sys:'Latin',dir:'ltr',def:'La buena tipografía es un mensaje visual. El texto hermoso habla antes que las palabras.'},
+  {id:'pt',label:'Portuguese',sys:'Latin',dir:'ltr',def:'A boa tipografia é uma mensagem visual. O texto bonito fala antes das palavras.'},
+  {id:'it',label:'Italian',sys:'Latin',dir:'ltr',def:'La buona tipografia è un messaggio visivo. Il bello testo parla prima delle parole.'},
+  {id:'nl',label:'Dutch',sys:'Latin+',dir:'ltr',def:'Goede typografie is een visuele boodschap. Mooie tekst spreekt voor de woorden.'},
+  {id:'fi',label:'Finnish',sys:'Latin+',dir:'ltr',def:'Lentokonesuihkuturbiinimoottoriapumekaanikkoaliupseerioppilas — hyvä typografia.'},
+  {id:'pl',label:'Polish',sys:'Latin+',dir:'ltr',def:'Dobra typografia to wizualny komunikat. Piękny tekst mówi zanim słowa zostaną przeczytane.'},
+  {id:'ru',label:'Russian',sys:'Cyrillic',dir:'ltr',def:'Хорошая типографика — это визуальное сообщение. Красивый текст говорит раньше слов.'},
+  {id:'uk',label:'Ukrainian',sys:'Cyrillic',dir:'ltr',def:'Хороша типографіка — це візуальне повідомлення. Гарний текст говорить раніше слів.'},
+  {id:'el',label:'Greek',sys:'Greek',dir:'ltr',def:'Η καλή τυπογραφία είναι ένα οπτικό μήνυμα. Το όμορφο κείμενο μιλά πριν από τις λέξεις.'},
+  {id:'ar',label:'Arabic',sys:'Arabic',dir:'rtl',def:'الطباعة الجيدة هي الرسالة المرئية. النص الجميل يتحدث قبل أن تُقرأ الكلمات.'},
+  {id:'fa',label:'Persian / Farsi',sys:'Arabic',dir:'rtl',def:'تایپوگرافی خوب یک پیام بصری است. متن زیبا پیش از خواندن کلمات صحبت می‌کند.'},
+  {id:'ur',label:'Urdu',sys:'Arabic',dir:'rtl',def:'اچھی ٹائپوگرافی ایک بصری پیغام ہے۔ خوبصورت متن الفاظ سے پہلے بولتا ہے۔'},
+  {id:'he',label:'Hebrew',sys:'Hebrew',dir:'rtl',def:'טיפוגרפיה טובה היא מסר ויזואלי. הטקסט היפה מדבר לפני שהמילים נקראות.'},
+  {id:'hi',label:'Hindi',sys:'Devanagari',dir:'ltr',def:'अच्छी टाइपोग्राफी एक दृश्य संदेश है। सुंदर पाठ शब्दों से पहले बोलता है।'},
+  {id:'mr',label:'Marathi',sys:'Devanagari',dir:'ltr',def:'चांगले टायपोग्राफी एक दृश्य संदेश आहे. सुंदर मजकूर शब्दांआधी बोलतो.'},
+  {id:'ta',label:'Tamil',sys:'Tamil',dir:'ltr',def:'நல்ல டைப்போகிராஃபி ஒரு காட்சி செய்தி. அழகான உரை வார்த்தைகளுக்கு முன் பேசுகிறது.'},
+  {id:'te',label:'Telugu',sys:'Telugu',dir:'ltr',def:'మంచి టైపోగ్రఫీ ఒక దృశ్య సందేశం. అందమైన వచనం పదాలకు ముందే మాట్లాడుతుంది.'},
+  {id:'kn',label:'Kannada',sys:'Kannada',dir:'ltr',def:'ಉತ್ತಮ ಟೈಪೋಗ್ರಫಿ ಒಂದು ದೃಶ್ಯ ಸಂದೇಶ. ಸುಂದರ ಪಠ್ಯ ಪದಗಳಿಗಿಂತ ಮುಂಚೆ ಮಾತನಾಡುತ್ತದೆ.'},
+  {id:'ml',label:'Malayalam',sys:'Malayalam',dir:'ltr',def:'നല്ല ടൈപ്പോഗ്രഫി ഒരു ദൃശ്യ സന്ദേശമാണ്. മനോഹരമായ ടെക്സ്റ്റ് വാക്കുകൾക്ക് മുമ്പ് സംസാരിക്കുന്നു.'},
+  {id:'gu',label:'Gujarati',sys:'Gujarati',dir:'ltr',def:'સારી ટાઇપોગ્રાફી એ દ્રશ્ય સંદેશ છે. સુંદર ટેક્સ્ટ શબ્દો પહેલા બોલે છે.'},
+  {id:'bn',label:'Bengali',sys:'Bengali',dir:'ltr',def:'ভালো টাইপোগ্রাফি একটি দৃশ্যমান বার্তা। সুন্দর পাঠ্য শব্দের আগে কথা বলে।'},
+  {id:'pa',label:'Punjabi',sys:'Gurmukhi',dir:'ltr',def:'ਚੰਗੀ ਟਾਈਪੋਗ੍ਰਾਫੀ ਇੱਕ ਦ੍ਰਿਸ਼ਟੀਗਤ ਸੁਨੇਹਾ ਹੈ। ਸੁੰਦਰ ਪਾਠ ਸ਼ਬਦਾਂ ਤੋਂ ਪਹਿਲਾਂ ਬੋਲਦਾ ਹੈ।'},
+  {id:'zh',label:'Chinese (Simp)',sys:'CJK',dir:'ltr',def:'良好的字体排版是视觉信息传达。美丽的文字在语言之前表达思想。'},
+  {id:'ja',label:'Japanese',sys:'CJK',dir:'ltr',def:'良いタイポグラフィは視覚的なメッセージです。美しいテキストは言葉の前に語りかけます。'},
+  {id:'ko',label:'Korean',sys:'Hangul',dir:'ltr',def:'좋은 타이포그래피는 시각적 메시지입니다. 아름다운 텍스트는 말보다 먼저 이야기합니다.'},
+  {id:'th',label:'Thai',sys:'Thai',dir:'ltr',def:'การออกแบบตัวอักษรที่ดีคือข้อความที่มองเห็น ข้อความที่สวยงามพูดก่อนคำพูด'},
+  {id:'emoji',label:'Emoji',sys:'Emoji',dir:'ltr',def:'✨ Typography 🎨 speaks 💬 before 🔤 words 🚀 — ClampType 📐 makes 🔥 every 💡 scale ✅ fluid 🌊'}
+];
+
+var activeScriptIdx=0;
+
+function clampVal(base,ratio,exp,vpMin,vpMax){
+  var minPx=+(base*Math.pow(ratio,exp)).toFixed(2);
+  var maxPx=+(base*Math.pow(ratio,exp+1)).toFixed(2);
+  var minRem=+(minPx/16).toFixed(4);
+  var maxRem=+(maxPx/16).toFixed(4);
+  var slope=(maxPx-minPx)/(vpMax-vpMin);
+  var intercept=minPx-slope*vpMin;
+  var slopePct=+(slope*100).toFixed(4);
+  var intRem=+(intercept/16).toFixed(4);
+  return{minPx:minPx,maxPx:maxPx,minRem:minRem,maxRem:maxRem,clamp:'clamp('+minRem+'rem, '+slopePct+'vi + '+intRem+'rem, '+maxRem+'rem)'};
+}
+function fluidPx(item,vp){
+  var slope=(item.maxPx-item.minPx)/(S.vpMax-S.vpMin);
+  return Math.min(Math.max(slope*vp+item.minPx-slope*S.vpMin,item.minPx),item.maxPx);
+}
+function getText(fallback){return S.customText||(fallback||'ClampType');}
+
+function recalc(){
+  S.base=parseFloat(document.getElementById('base').value)||16;
+  S.ratio=parseFloat(document.getElementById('ratio').value)||1.25;
+  S.vpMin=parseInt(document.getElementById('vp-min').value)||320;
+  S.vpMax=parseInt(document.getElementById('vp-max').value)||1440;
+  document.getElementById('hint-base').textContent=S.base+'px';
+  document.getElementById('scale-info').textContent=S.vpMin+' → '+S.vpMax+'px';
+  document.getElementById('tbl-meta').textContent='Base '+S.base+'px · Ratio '+S.ratio.toFixed(3);
+  S.scale=LEVELS.map(function(lv){
+    var cv=clampVal(S.base,S.ratio,lv.exp,S.vpMin,S.vpMax);
+    return{name:lv.name,tag:lv.tag,exp:lv.exp,minPx:cv.minPx,maxPx:cv.maxPx,minRem:cv.minRem,maxRem:cv.maxRem,clamp:cv.clamp};
+  });
+  renderScaleTable();
+  renderCSSOutput();
+  buildFluidVp();
+  renderFluidLvls();
+  renderFluidPreview();
+  renderScriptStress();
+}
+
+function setRatio(el){
+  document.querySelectorAll('.ratio-tile').forEach(function(t){t.classList.remove('on');});
+  el.classList.add('on');
+  document.getElementById('ratio').value=el.dataset.ratio;
+  recalc();
+}
+function onRatioInput(){
+  document.querySelectorAll('.ratio-tile').forEach(function(t){t.classList.remove('on');});
+  recalc();
+}
+function onCustomText(){
+  S.customText=document.getElementById('custom-text').value;
+  renderScaleTable();
+  renderFluidPreview();
+  renderScriptStress();
+}
+
+function renderScaleTable(){
+  var h='';
+  for(var i=0;i<S.scale.length;i++){
+    var v=S.scale[i];
+    var txt=getText(v.tag);
+    var minSz=Math.min(v.minPx,40);
+    var maxSz=Math.min(v.maxPx,52);
+    h+='<div class="scale-row">'+
+      '<div class="sc-tag">'+v.tag+'</div>'+
+      '<div class="sc-preview" style="font-size:'+minSz+'px" title="Min: '+v.minPx+'px">'+txt+'</div>'+
+      '<div class="sc-preview" style="font-size:'+maxSz+'px" title="Max: '+v.maxPx+'px">'+txt+'</div>'+
+      '<div class="sc-range">'+v.minPx.toFixed(0)+'–'+v.maxPx.toFixed(0)+'px</div>'+
+      '<div class="sc-clamp">'+v.clamp+'</div>'+
+      '</div>';
+  }
+  document.getElementById('scale-rows').innerHTML=h;
+}
+
+function renderCSSOutput(){
+  var lines=['<span class="c-root">:root {</span>'];
+  for(var i=0;i<S.scale.length;i++){
+    var v=S.scale[i];
+    lines.push('  <span class="c-var">--fs-'+v.name.replace('fs/','')+': </span><span class="c-val">'+v.clamp+'</span>;');
+  }
+  lines.push('<span class="c-root">}</span>');
+  lines.push('');
+  lines.push('<span class="c-root">/* Utility classes */</span>');
+  var defs={
+    'h1':{lh:'1.06',fw:'800',ls:'-0.03em'},
+    'h2':{lh:'1.1',fw:'700',ls:'-0.02em'},
+    'h3':{lh:'1.14',fw:'700',ls:'-0.01em'},
+    'h4':{lh:'1.18',fw:'700',ls:'-0.005em'},
+    'h5':{lh:'1.22',fw:'600',ls:'0'},
+    'h6':{lh:'1.28',fw:'600',ls:'0'},
+    'body':{lh:'1.65',fw:'400',ls:'0'},
+    'caption':{lh:'1.5',fw:'400',ls:'0.01em'},
+    'cta':{lh:'1.2',fw:'700',ls:'0.02em'}
+  };
+  for(var i=0;i<S.scale.length;i++){
+    var v=S.scale[i];
+    var key=v.name.replace('fs/','');
+    var d=defs[key]||{lh:'1.4',fw:'400',ls:'0'};
+    lines.push('<span class="c-root">.'+key+' {</span>');
+    lines.push('  <span class="c-var">font-size: </span><span class="c-val">var(--fs-'+key+')</span>;');
+    lines.push('  <span class="c-var">line-height: </span><span class="c-val">'+d.lh+'</span>;');
+    lines.push('  <span class="c-var">font-weight: </span><span class="c-val">'+d.fw+'</span>;');
+    if(d.ls!='0') lines.push('  <span class="c-var">letter-spacing: </span><span class="c-val">'+d.ls+'</span>;');
+    lines.push('<span class="c-root">}</span>');
+  }
+  document.getElementById('css-out').innerHTML=lines.join('\n');
+}
+
+function buildRawCSS(){
+  var lines=[
+    '/* ClampType — Fluid Typography Scale',
+    ' * Generated by ClampType Web Generator · clamptype.elustra.in',
+    ' * Base: '+S.base+'px · Ratio: '+S.ratio.toFixed(3)+' · Viewport: '+S.vpMin+'–'+S.vpMax+'px',
+    ' */',
+    '',
+    ':root {'
+  ];
+  for(var i=0;i<S.scale.length;i++){
+    var v=S.scale[i];
+    lines.push('  --fs-'+v.name.replace('fs/','')+': '+v.clamp+';');
+  }
+  lines.push('}');
+  lines.push('');
+  lines.push('/* Utility classes */');
+  var defs={
+    'h1':{lh:'1.06',fw:'800',ls:'-0.03em'},
+    'h2':{lh:'1.1',fw:'700',ls:'-0.02em'},
+    'h3':{lh:'1.14',fw:'700',ls:'-0.01em'},
+    'h4':{lh:'1.18',fw:'700',ls:'-0.005em'},
+    'h5':{lh:'1.22',fw:'600',ls:'0'},
+    'h6':{lh:'1.28',fw:'600',ls:'0'},
+    'body':{lh:'1.65',fw:'400',ls:'0'},
+    'caption':{lh:'1.5',fw:'400',ls:'0.01em'},
+    'cta':{lh:'1.2',fw:'700',ls:'0.02em'}
+  };
+  for(var i=0;i<S.scale.length;i++){
+    var v=S.scale[i];
+    var key=v.name.replace('fs/','');
+    var d=defs[key]||{lh:'1.4',fw:'400',ls:'0'};
+    lines.push('.'+key+' {');
+    lines.push('  font-size: var(--fs-'+key+');');
+    lines.push('  line-height: '+d.lh+';');
+    lines.push('  font-weight: '+d.fw+';');
+    if(d.ls!='0') lines.push('  letter-spacing: '+d.ls+';');
+    lines.push('}');
+  }
+  return lines.join('\n');
+}
+
+function downloadCSS(){
+  var css=buildRawCSS();
+  var blob=new Blob([css],{type:'text/css'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='clamptype-scale-'+S.base+'px-'+S.ratio.toFixed(3)+'.css';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function copyCSSInline(){
+  var css=buildRawCSS();
+  var btn=document.getElementById('copy-btn-css');
+  function done(){
+    btn.classList.add('done');
+    btn.innerHTML='<svg width="11" height="11" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg> Copied!';
+    setTimeout(function(){
+      btn.classList.remove('done');
+      btn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy';
+    },2000);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(css).then(done);}
+  else{var ta=document.createElement('textarea');ta.value=css;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);done();}
+}
+
+function copyCSSMain(){
+  var css=buildRawCSS();
+  var btn=document.getElementById('copy-btn-main');
+  function done(){
+    btn.classList.add('done');
+    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg> Copied!';
+    setTimeout(function(){
+      btn.classList.remove('done');
+      btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy CSS to Clipboard';
+    },2000);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(css).then(done);}
+  else{var ta=document.createElement('textarea');ta.value=css;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);done();}
+}
+
+function buildFluidVp(){
+  var sel=document.getElementById('fluid-vp');
+  var pts=[S.vpMin];
+  var range=S.vpMax-S.vpMin;
+  var step=range<=800?40:range<=1400?80:160;
+  for(var v=S.vpMin+step;v<S.vpMax;v+=step)pts.push(v);
+  pts.push(S.vpMax);
+  var common=[375,414,768,1024,1280,1440,1920];
+  for(var c=0;c<common.length;c++){if(common[c]>S.vpMin&&common[c]<S.vpMax&&pts.indexOf(common[c])===-1)pts.push(common[c]);}
+  pts.sort(function(a,b){return a-b;});
+  var unique=pts.filter(function(v,i,a){return a.indexOf(v)===i;});
+  var labels={375:'375 — iPhone SE',414:'414 — Plus',768:'768 — iPad',1024:'1024 — iPad Pro',1280:'1280 — Laptop',1440:'1440 — Desktop',1920:'1920 — FHD'};
+  var mid=Math.round((S.vpMin+S.vpMax)/2);
+  var closest=unique.reduce(function(a,b){return Math.abs(b-mid)<Math.abs(a-mid)?b:a;});
+  var h='';
+  for(var j=0;j<unique.length;j++){
+    var px=unique[j];
+    var lbl=labels[px]?labels[px]+'px':px+'px';
+    h+='<option value="'+px+'"'+(px===closest?' selected':'')+'>'+lbl+'</option>';
+  }
+  sel.innerHTML=h;
+}
+
+function renderFluidLvls(){
+  var h='';
+  for(var i=0;i<LEVELS.length;i++){
+    h+='<button class="fl-btn'+(i===S.fluidLevel?' on':'')+'" onclick="setFluidLevel('+i+')">'+LEVELS[i].tag+'</button>';
+  }
+  document.getElementById('fluid-lvls').innerHTML=h;
+}
+function setFluidLevel(idx){S.fluidLevel=idx;renderFluidLvls();renderFluidPreview();}
+
+function renderFluidPreview(){
+  if(!S.scale.length)return;
+  var vp=parseInt(document.getElementById('fluid-vp').value)||Math.round((S.vpMin+S.vpMax)/2);
+  var item=S.scale[S.fluidLevel];
+  if(!item)return;
+  var px=fluidPx(item,vp);
+  document.getElementById('fluid-sz').textContent=px.toFixed(1)+'px';
+  document.getElementById('fluid-lbl').textContent=item.tag;
+  document.getElementById('fluid-clamp').textContent=item.clamp;
+  var el=document.getElementById('fluid-sample');
+  el.style.fontSize=Math.min(px,84)+'px';
+  el.style.fontWeight='800';
+  el.textContent=getText(item.tag+' — Aa');
+}
+
+function buildScriptDD(){
+  var h='';
+  for(var i=0;i<SCRIPTS.length;i++){
+    var sc=SCRIPTS[i];
+    h+='<option value="'+i+'">'+sc.label+' · '+sc.sys+(sc.dir==='rtl'?' ↔ RTL':' · LTR')+'</option>';
+  }
+  document.getElementById('scripts-dd').innerHTML=h;
+}
+function onScriptChange(){
+  activeScriptIdx=parseInt(document.getElementById('scripts-dd').value)||0;
+  renderScriptStress();
+}
+function renderScriptStress(){
+  var sc=SCRIPTS[activeScriptIdx];
+  var fontSize=S.scale.length?Math.min(Math.max(S.scale[2].minPx,13),22):16;
+  var text=S.customText||sc.def;
+  var el=document.getElementById('sc-text-el');
+  el.textContent=text;
+  el.setAttribute('dir',sc.dir);
+  el.style.fontSize=fontSize+'px';
+  el.style.fontWeight='500';
+  el.style.textAlign=sc.dir==='rtl'?'right':'left';
+  document.getElementById('sc-meta-el').textContent=sc.label+' · '+sc.sys+(sc.dir==='rtl'?' · RTL':' · LTR')+(S.scale.length?' · H3 range: '+S.scale[2].minPx.toFixed(0)+'–'+S.scale[2].maxPx.toFixed(0)+'px':'');
+  var badge=document.getElementById('sc-dir-badge');
+  badge.textContent=sc.dir==='rtl'?'RTL':'LTR';
+  badge.style.color=sc.dir==='rtl'?'#D46026':'var(--ink3)';
+}
+
 function toggleMenu(){
   document.getElementById('ham').classList.toggle('open');
   document.getElementById('drawer').classList.toggle('open');
@@ -758,6 +1248,9 @@ function closeMenu(){
 document.addEventListener('click',function(e){
   if(!e.target.closest('nav')&&!e.target.closest('.nav-drawer')){closeMenu();}
 });
+
+buildScriptDD();
+recalc();
 </script>
 </body>
 </html>
