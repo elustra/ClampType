@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ClampType — Fluid Typography Scale for Figma</title>
+<meta name="description" content="Generate mathematically perfect fluid typography scales. CSS clamp(), Figma Variables, and frame output — all in one free Figma plugin. H1 to Caption, 20+ global scripts, zero API."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="mask-icon" href="favicon.svg" color="#D46026">
+<style>
+:root{
+  /* Exact plugin palette match */
+  --orange:#D46026;        /* --accent */
+  --orange-dk:#B03A10;     /* --accent-dk (hover) */
+
+  /* Section backgrounds — solid only */
+  --surf:#FFFFFF;          /* --surf */
+  --bg:#FFF8F2;            /* --bg */
+  --bg2:#FFF2E8;           /* --surf2 equivalent */
+  --surf3:#FFEEDE;         /* --surf3 */
+  --hdr:#FBF5EE;           /* --hdr */
+  --hero-bg:#1A0808;       /* dark sections */
+
+  /* Borders */
+  --bdr:rgba(212,96,38,.13);
+  --bdr-dark:rgba(212,96,38,.24);
+
+  /* Text — exact plugin values */
+  --ink:#2D1208;
+  --ink2:#7A3920;
+  --ink3:#B07054;
+
+  --font:'Golos Text',system-ui,sans-serif;
+  --mono:'DM Mono','Courier New',monospace;
+  --max:1160px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* ═══════════════════════════════════════════
+   NAV — off-white bg, dark orange logos
+════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:64px;
+  background:var(--hdr);
+  border-bottom:1.5px solid var(--bdr-dark);
+}
+/* Logo left */
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.nav-logo-icon{
+  width:32px;height:30px;
+  background:#D46026;
+  border-radius:7px;
+  display:flex;align-items:center;justify-content:center;padding:5px;
+  flex-shrink:0;
+}
+.nav-logo-icon svg{width:22px;height:20px;display:block;}
+.nav-name{font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.25px;white-space:nowrap;}
+
+/* Nav links */
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-link{
+  padding:7px 12px;font-size:13px;font-weight:600;
+  color:var(--ink2);text-decoration:none;
+  border-radius:8px;transition:color .14s,background .14s;white-space:nowrap;
+}
+.nav-link:hover{color:var(--ink);background:rgba(212,96,38,.08);}
+.nav-cta{
+  background:#D46026;color:#fff!important;
+  padding:8px 16px!important;border-radius:8px;
+  box-shadow:0 3px 12px rgba(212,96,38,.36);
+  transition:background .14s,transform .14s,box-shadow .14s;
+}
+.nav-cta:hover{background:#B03A10;transform:translateY(-1px);box-shadow:0 5px 16px rgba(212,96,38,.44);}
+
+.nav-ham{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
+.nav-ham span{width:22px;height:2px;background:var(--ink);border-radius:2px;transition:transform .28s,opacity .28s;display:block;}
+.nav-ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-ham.open span:nth-child(2){opacity:0;}
+.nav-ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.nav-drawer{
+  display:none;position:fixed;top:64px;left:0;right:0;z-index:99;
+  background:var(--hdr);border-bottom:1.5px solid var(--bdr-dark);
+  flex-direction:column;padding:14px 20px 18px;gap:4px;
+}
+.nav-drawer.open{display:flex;}
+.nav-drawer .nav-link{padding:11px 14px;font-size:14px;border-radius:8px;}
+.nav-drawer .nav-cta{margin-top:6px;text-align:center;padding:12px 14px!important;font-size:14px;border-radius:8px;}
+
+/* ═══════════════════════════════════════════
+   HERO — solid dark bg, no gradients on sections
+════════════════════════════════════════════ */
+.hero{
+  min-height:100vh;
+  background:var(--hero-bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 24px 80px;
+  position:relative;overflow:hidden;
+}
+/* hero glow removed — solid bg only */
+
+/* Presented by Elustra badge */
+.presented-by{
+  display:inline-flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+  padding:8px 20px 8px 14px;border-radius:100px;margin-bottom:28px;
+}
+.presented-by-txt{font-size:11px;font-weight:500;color:rgba(255,255,255,.55);letter-spacing:.06em;}
+/* Elustra full wordmark — larger, all 7 paths, white */
+.elustra-hero{
+  height:22px;   /* increased from 14px */
+  width:auto;
+  display:block;
+  flex-shrink:0;
+}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.9);font-size:12px;font-weight:600;letter-spacing:.5px;
+  padding:7px 18px;border-radius:100px;margin-bottom:32px;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:#4ADE80;animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.38}}
+
+/* Title Case headlines */
+.hero h1{
+  font-size:clamp(34px,6.5vw,76px);font-weight:800;color:#fff;
+  letter-spacing:-2px;line-height:1.06;max-width:860px;
+  margin:0 auto 24px;position:relative;z-index:1;
+}
+.hero h1 span{color:var(--honey);}
+
+.hero-sub{
+  font-size:clamp(15px,2vw,19px);font-weight:400;line-height:1.65;
+  color:rgba(255,255,255,.6);max-width:580px;margin:0 auto 46px;
+  position:relative;z-index:1;
+}
+.hero-btns{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  justify-content:center;position:relative;z-index:1;
+}
+.btn-p{
+  display:inline-flex;align-items:center;gap:9px;
+  background:#D46026;color:#fff;
+  font-family:var(--font);font-size:14.5px;font-weight:700;
+  padding:13px 26px;border-radius:10px;text-decoration:none;border:none;cursor:pointer;
+  box-shadow:0 6px 22px rgba(212,96,38,.48);
+  transition:background .18s,transform .18s,box-shadow .18s;
+}
+.btn-p:hover{background:#B03A10;transform:translateY(-2px);box-shadow:0 10px 28px rgba(212,96,38,.52);}
+.btn-g{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.22);
+  color:#fff;font-family:var(--font);font-size:14px;font-weight:600;
+  padding:12px 22px;border-radius:10px;text-decoration:none;
+  transition:background .18s,transform .18s;
+}
+.btn-g:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
+
+.stats-strip{
+  display:flex;align-items:center;gap:36px;flex-wrap:wrap;
+  justify-content:center;margin-top:64px;position:relative;z-index:1;
+}
+.stat-h{text-align:center;}
+.stat-n{font-size:30px;font-weight:800;color:#fff;line-height:1;}
+.stat-l{font-size:10px;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.8px;text-transform:uppercase;margin-top:5px;}
+.stat-d{width:1px;height:40px;background:rgba(255,255,255,.14);}
+
+/* ═══════════════════════════════════════════
+   SECTION SHARED STYLES
+════════════════════════════════════════════ */
+section{padding:88px 24px;}
+.container{max-width:var(--max);margin:0 auto;}
+/* Title Case chip */
+.s-chip{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;color:#D46026;margin-bottom:14px;
+  padding:5px 14px;background:#FFEEDE;border-radius:100px;
+}
+/* Title Case h2 */
+.s-h{font-size:clamp(24px,3.8vw,44px);font-weight:800;letter-spacing:-1px;color:var(--ink);margin-bottom:16px;line-height:1.12;}
+.s-h span{color:#D46026;}
+.s-p{font-size:16.5px;color:var(--ink2);max-width:560px;line-height:1.65;}
+
+/* ═══════════════════════════════════════════
+   HOW IT WORKS — solid white bg
+════════════════════════════════════════════ */
+.how-bg{background:var(--surf);}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;margin-top:52px;}
+.step{
+  background:var(--bg);border:1.5px solid var(--bdr);
+  border-radius:14px;padding:26px 22px;
+  transition:transform .18s,box-shadow .18s;
+}
+.step:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(212,96,38,.12);}
+.step-n{
+  width:38px;height:38px;border-radius:9px;background:#D46026;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#fff;margin-bottom:14px;
+}
+/* Title Case step h3 */
+.step h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.step p{font-size:13px;color:var(--ink3);line-height:1.62;}
+
+/* ═══════════════════════════════════════════
+   FEATURES — solid bg2
+════════════════════════════════════════════ */
+.feat-bg{background:var(--bg2);}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:52px;}
+.feat{
+  background:var(--surf);border:1.5px solid var(--bdr);
+  border-radius:14px;padding:26px 24px;
+  transition:transform .18s,box-shadow .18s,border-color .18s;
+}
+.feat:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(212,96,38,.12);border-color:rgba(212,96,38,.28);}
+.feat-ico{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+/* Title Case feat h3 */
+.feat h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.feat p{font-size:13.5px;color:var(--ink3);line-height:1.62;}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
+.tag{font-family:var(--mono);font-size:10px;font-weight:500;background:#FFEEDE;color:#D46026;padding:3px 9px;border-radius:5px;}
+
+/* ═══════════════════════════════════════════
+   SCALE DEMO — solid white
+════════════════════════════════════════════ */
+.scale-bg{background:var(--surf);}
+.scale-demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start;margin-top:52px;}
+.scale-list{display:flex;flex-direction:column;gap:6px;}
+.scale-item{
+  display:flex;align-items:center;gap:11px;padding:11px 14px;
+  background:var(--bg);border:1.5px solid var(--bdr);border-radius:9px;
+}
+.scale-badge{width:46px;font-family:var(--mono);font-size:9.5px;font-weight:600;color:#D46026;flex-shrink:0;}
+.scale-bar-wrap{flex:1;}
+.scale-bar-lbl{font-family:var(--mono);font-size:8.5px;color:var(--ink3);margin-bottom:4px;}
+.scale-bar-bg{height:5px;background:var(--bdr);border-radius:3px;overflow:hidden;}
+.scale-bar-fill{height:100%;border-radius:3px;background:#D46026;}
+.scale-demo-visual{
+  background:#1A0808;border-radius:18px;padding:26px;
+  display:flex;flex-direction:column;gap:7px;
+}
+.scale-vis-row{
+  display:flex;align-items:baseline;gap:10px;
+  background:rgba(255,255,255,.04);border-radius:7px;
+  padding:9px 12px;border:1px solid rgba(255,255,255,.07);
+}
+.scale-vis-tag{font-family:var(--mono);font-size:8.5px;font-weight:600;color:rgba(255,169,93,.75);min-width:54px;}
+.scale-vis-sample{font-weight:700;color:#fff;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* ═══════════════════════════════════════════
+   OUTPUTS — solid bg2
+════════════════════════════════════════════ */
+.out-bg{background:var(--bg2);}
+.out-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:52px;}
+.out-card{border-radius:14px;padding:26px 22px;border:1.5px solid var(--bdr);background:var(--surf);transition:transform .18s,box-shadow .18s;}
+.out-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(212,96,38,.12);}
+.out-ext{font-family:var(--mono);font-size:12.5px;font-weight:500;margin-bottom:14px;display:inline-block;padding:4px 11px;border-radius:6px;}
+/* Title Case out-card h3 */
+.out-card h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.out-card ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.out-card li{font-size:12.5px;color:var(--ink3);display:flex;align-items:flex-start;gap:7px;line-height:1.42;}
+.out-card li::before{content:'→';color:#D46026;font-weight:700;flex-shrink:0;}
+
+/* ═══════════════════════════════════════════
+   SCRIPTS — solid white
+════════════════════════════════════════════ */
+.scripts-bg{background:var(--surf);}
+.scripts-row{display:flex;gap:9px;align-items:flex-end;justify-content:center;flex-wrap:wrap;margin-top:52px;}
+.script-item{
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  padding:14px 12px;border-radius:11px;
+  background:var(--bg);border:1.5px solid var(--bdr);min-width:78px;
+  transition:transform .18s,box-shadow .18s;
+}
+.script-item:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(212,96,38,.14);}
+.script-flag{font-size:20px;line-height:1;}
+.script-name{font-size:9.5px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.4px;text-align:center;}
+.script-script{font-family:var(--mono);font-size:9.5px;color:var(--ink3);text-align:center;}
+
+/* ═══════════════════════════════════════════
+   FREE CTA — solid dark
+════════════════════════════════════════════ */
+.free-bg{background:var(--hero-bg);text-align:center;padding:112px 24px;}
+.free-bg .s-chip{background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.18);}
+.free-bg .s-h{color:#fff;}
+.free-bg .s-p{color:rgba(255,255,255,.58);margin:0 auto 44px;}
+.perks{display:flex;flex-wrap:wrap;gap:13px;justify-content:center;margin-top:44px;}
+.perk{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:rgba(255,255,255,.75);}
+.perk-ck{
+  width:21px;height:21px;border-radius:6px;
+  background:rgba(74,222,128,.18);border:1px solid rgba(74,222,128,.38);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER — solid dark, properly aligned
+════════════════════════════════════════════ */
+footer{background:#1A0808;padding:52px 24px 0;}
+
+/* Container keeps everything at max-width and centered */
+.ft-inner{
+  max-width:var(--max);
+  margin:0 auto;
+}
+.ft-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:32px;
+  padding-bottom:36px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  flex-wrap:wrap;
+}
+.ft-brand{
+  display:flex;flex-direction:column;gap:14px;
+  max-width:440px;
+}
+.fb-logo{display:flex;align-items:center;gap:11px;}
+.fb-logo-icon{
+  width:30px;height:28px;background:#D46026;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0;
+}
+.fb-logo-icon svg{width:22px;height:20px;display:block;}
+.fb-name{font-size:15px;font-weight:700;color:#fff;}
+.fb-desc{font-size:13.5px;color:rgba(255,255,255,.38);line-height:1.65;}
+.fb-elustra{display:flex;align-items:center;gap:9px;}
+.fb-elustra-lbl{font-size:11px;color:rgba(255,255,255,.32);font-weight:500;}
+/* Elustra footer logo — visible size */
+.fb-elustra-logo{height:13px;width:auto;display:block;}
+
+/* Footer links column */
+.ft-links{display:flex;flex-direction:column;gap:8px;}
+.ft-link{font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .14s;}
+.ft-link:hover{color:rgba(255,255,255,.8);}
+
+/* Bottom bar */
+.fb-bot{
+  max-width:var(--max);
+  margin:0 auto;
+  padding:18px 0 22px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.fb-copy{font-size:12.5px;color:rgba(255,255,255,.28);}
+
+/* ═══════════════════════════════════════════
+   WHATSAPP STICKY
+════════════════════════════════════════════ */
+.wa-sticky{
+  position:fixed;bottom:24px;right:24px;z-index:200;
+  display:flex;align-items:center;gap:9px;
+  background:#22C55E;color:#fff;text-decoration:none;
+  padding:10px 14px 10px 11px;border-radius:100px;
+  box-shadow:0 4px 18px rgba(34,197,94,.42);
+  transition:transform .18s,box-shadow .18s;
+}
+.wa-sticky:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(34,197,94,.52);}
+.wa-sticky svg{width:20px;height:20px;flex-shrink:0;}
+.wa-label{display:flex;flex-direction:column;}
+.wa-label-main{font-size:12px;font-weight:700;line-height:1.2;}
+.wa-label-sub{font-size:9.5px;opacity:.8;}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════ */
+@media(max-width:960px){
+  nav{padding:0 22px;}
+  .nav-links{display:none;}
+  .nav-ham{display:flex;}
+  .scale-demo-grid{grid-template-columns:1fr;}
+  .scale-demo-visual{display:none;}
+  .ft-top{flex-direction:column;}
+}
+@media(max-width:640px){
+  .stats-strip{gap:18px;}
+  .stat-d{display:none;}
+  .wa-label-sub{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-icon">
+      <!-- Full ClampType SVG — left bracket, right bracket, T crossbar -->
+      <svg viewBox="0 0 78 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20.9233 6.75L20.9409 6.98047L21.2671 11.2109L21.2876 11.4795H21.0181C18.5728 11.4795 16.7978 12.0161 15.646 13.043L15.645 13.0439C14.5193 14.0435 13.7603 15.4242 13.3784 17.2041C13.0351 19.0063 12.8628 21.0491 12.8628 23.334V50.666C12.8628 52.9068 13.035 54.9497 13.3784 56.7959L13.4546 57.125C13.8568 58.7469 14.5897 60.019 15.645 60.9561L15.646 60.957C16.7978 61.9839 18.5728 62.5205 21.0181 62.5205H21.2876L21.2671 62.7891L20.9409 67.0195L20.9233 67.25H20.6919C17.2821 67.25 14.5835 66.7052 12.6196 65.5908V65.5898C10.691 64.5141 9.30913 62.7695 8.46729 60.3799C7.63076 58.0052 7.12892 54.8978 6.95459 51.0674C6.78062 47.2013 6.69385 42.512 6.69385 37C6.69385 31.4448 6.78062 26.7554 6.95459 22.9326C7.12892 19.1022 7.63076 15.9948 8.46729 13.6201C9.3094 11.2297 10.692 9.48382 12.6216 8.4082C14.5853 7.29455 17.2832 6.75002 20.6919 6.75H20.9233Z" fill="white"/>
+        <path d="M57.1958 6.75C60.6014 6.75002 63.2774 7.29382 65.1987 8.40723C67.172 9.48219 68.5776 11.2279 69.4204 13.6201C70.2569 15.9948 70.7588 19.1022 70.9331 22.9326C71.1071 26.7554 71.1938 31.4448 71.1938 37C71.1938 42.512 71.1071 47.2013 70.9331 51.0674C70.7588 54.8978 70.2569 58.0052 69.4204 60.3799C68.5777 62.772 67.1728 64.5178 65.1997 65.5928L65.1987 65.5918C63.2774 66.7054 60.6017 67.25 57.1958 67.25H56.9644L56.9468 67.0195L56.6206 62.7891L56.6001 62.5205H56.8696C59.3609 62.5205 61.1325 61.983 62.2388 60.96L62.2427 60.9561C63.3668 59.958 64.1037 58.5795 64.4429 56.8018L64.4438 56.7969L64.5796 56.0957C64.876 54.4373 65.0249 52.6277 65.0249 50.666V23.334C65.0249 21.0484 64.8304 19.0055 64.4438 17.2041L64.4429 17.1982C64.1037 15.4205 63.3668 14.042 62.2427 13.0439L62.2388 13.04C61.1325 12.017 59.3609 11.4795 56.8696 11.4795H56.6001L56.6206 11.2109L56.9468 6.98047L56.9644 6.75H57.1958Z" fill="white"/>
+        <path d="M51.5562 13.9082V18.9639H41.978V59.9619H35.8745V18.9639H26.2964V13.9082H51.5562Z" fill="white"/>
+      </svg>
+    </div>
+    <span class="nav-name">ClampType</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="#how">How It Works</a>
+    <a class="nav-link" href="#features">Features</a>
+    <a class="nav-link" href="#outputs">Outputs</a>
+    <a class="nav-link" href="#scripts">Scripts</a>
+    <a class="nav-link nav-cta" href="https://www.figma.com/community/plugin/1612318883144152924" target="_blank">
+      Install — Free
+    </a>
+  </div>
+  <button class="nav-ham" id="ham" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-drawer" id="drawer">
+  <a class="nav-link" href="#how" onclick="closeMenu()">How It Works</a>
+  <a class="nav-link" href="#features" onclick="closeMenu()">Features</a>
+  <a class="nav-link" href="#outputs" onclick="closeMenu()">Outputs</a>
+  <a class="nav-link" href="#scripts" onclick="closeMenu()">Scripts</a>
+  <a class="nav-link nav-cta" href="https://www.figma.com/community/plugin/1612318883144152924" target="_blank" onclick="closeMenu()">Install on Figma — Free</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <!-- Presented by Elustra — larger logo, all 7 paths white -->
+  <div class="presented-by">
+    <span class="presented-by-txt">Presented by</span>
+    <svg class="elustra-hero" viewBox="0 0 275 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Elustra">
+      <path d="M15.1085 25.5591L34.8545 25.2343V32.1673L15.1085 31.8425V50.4685H31.9209L36.7953 49.5837L38.7473 42.4827L42.8094 42.0795C42.753 43.0987 42.6965 44.174 42.6514 45.3052C42.595 46.2684 42.5386 47.3101 42.4934 48.4077C42.437 49.5053 42.4145 50.6029 42.4145 51.6782C42.4145 52.5966 42.437 53.5486 42.4934 54.5455C42.5499 55.5423 42.6063 56.4159 42.6514 57.1663C42.7078 58.1296 42.753 59.0704 42.8094 59.9888L38.7473 59.5072L38.4201 58.4544C38.2621 58.1296 38.0365 57.8719 37.7657 57.6927C37.4949 57.5023 37.2015 57.4127 36.8743 57.4127H0.0789841L0.485188 53.3806L5.1114 51.5214L6.65723 47.6461V9.43065C6.65723 9.16185 6.58953 8.89304 6.45413 8.62423C6.31873 8.35542 6.05921 8.16502 5.68685 8.06422L0.406204 6.60818L0 2.57607H33.6359C33.9632 2.57607 34.2565 2.49767 34.5273 2.32966C34.7981 2.17286 35.0125 1.90405 35.1818 1.52324L35.43 0.470413L39.492 -0.0112C39.4356 0.851223 39.3792 1.71365 39.3341 2.56487C39.2777 3.25929 39.2212 4.06571 39.1761 4.98413C39.131 5.90256 39.0971 6.80978 39.0971 7.72821C39.0971 8.80344 39.1197 9.87866 39.1761 10.9539C39.2325 12.0291 39.2889 13.0259 39.3341 13.9332C39.3905 14.8964 39.4469 15.8708 39.492 16.8341L35.43 16.4308L33.478 10.3827L28.6035 9.49785H15.9209L15.1085 13.3732V25.5591Z" fill="white"/>
+      <path d="M57.9287 7.90741C57.9287 7.42579 57.8159 7.05618 57.6015 6.82098C57.3871 6.57457 56.9809 6.46257 56.3829 6.46257H52.5691L52.1629 3.31528L63.1191 0.156799L67.5084 2.32966L66.1318 9.99066V50.4797C66.1318 50.8045 66.2221 51.107 66.4139 51.4094C66.6057 51.7006 66.8652 51.9022 67.1812 52.0142L72.3038 53.3806L72.71 57.4127C71.2432 57.3567 69.7876 57.2783 68.3208 57.1663C67.0796 57.1663 65.8046 57.1439 64.507 57.0879C63.2094 57.0319 62.0923 57.0095 61.1784 57.0095C60.2644 57.0095 59.1925 57.0319 57.9739 57.0879C56.7553 57.1439 55.5818 57.1663 54.4422 57.1663C53.201 57.2783 51.8921 57.3567 50.5381 57.4127L50.9443 53.3806L57.0373 51.443L57.9287 46.6044V7.90741Z" fill="white"/>
+      <path d="M77.1787 22.5798L76.7725 19.4325L87.8979 16.2852L92.2872 18.4581L90.8203 26.1191V46.0332C90.8203 48.1277 91.1927 49.6509 91.96 50.5918C92.716 51.5326 93.8556 52.003 95.3676 52.003C96.6087 52.003 97.8951 51.723 99.2265 51.1518C100.558 50.5918 101.81 49.9421 103.006 49.2141C104.191 48.4861 105.241 47.7805 106.132 47.0749C107.023 46.3692 107.633 45.8652 107.96 45.5404V24.0359C107.96 23.5542 107.847 23.1846 107.633 22.9494C107.418 22.703 107.012 22.591 106.414 22.591H102.431L102.025 19.4437L113.15 16.2964L117.54 18.4693L116.073 26.1303V50.4798C116.073 50.8046 116.163 51.0958 116.355 51.3646C116.547 51.6334 116.829 51.8462 117.212 52.0142L121.353 53.3806L121.76 57.4127C120.349 57.3567 118.939 57.2783 117.54 57.1663C116.343 57.1663 115.114 57.1551 113.839 57.1215C112.564 57.0991 111.469 57.0767 110.544 57.0767L107.621 52.7198L107.7 51.5886C105.692 53.5262 103.379 55.1727 100.75 56.5503C98.1207 57.9168 95.3789 58.6112 92.5016 58.6112C89.3648 58.6112 86.9388 57.6815 85.235 55.8335C83.5312 53.9854 82.6737 51.275 82.6737 47.7245V24.0359C82.6737 23.5542 82.5609 23.1846 82.3465 22.9494C82.1321 22.703 81.7259 22.591 81.1279 22.591H77.1448L77.1787 22.5798Z" fill="white"/>
+      <path d="M153.906 28.4264C152.958 29.4792 151.83 30.2632 150.532 30.8008C149.28 30.2632 148.174 29.468 147.203 28.4264C146.233 27.3735 145.421 26.2647 144.766 25.0775C145.037 24.5959 145.33 24.1254 145.658 23.6662C145.985 23.207 146.335 22.7702 146.718 22.3334C145.962 22.0086 145.24 21.7846 144.563 21.6502C143.886 21.5158 143.164 21.4486 142.408 21.4486C140.512 21.4486 139.012 21.8518 137.895 22.6582C136.789 23.4646 136.225 24.4838 136.225 25.7271C136.225 26.5895 136.507 27.3847 137.082 28.1015C137.646 28.8296 138.391 29.5128 139.316 30.1624C140.242 30.812 141.347 31.4504 142.645 32.1001C143.943 32.7497 145.33 33.4441 146.786 34.1945C148.14 34.8889 149.449 35.6393 150.724 36.4122C151.999 37.1962 153.105 38.0474 154.052 38.9882C155 39.9291 155.768 41.0267 156.366 42.2923C156.964 43.558 157.257 45.0252 157.257 46.6828C157.257 48.3405 156.896 49.9085 156.162 51.3646C155.429 52.8206 154.391 54.075 153.037 55.1503C151.683 56.2255 150.081 57.0767 148.242 57.6927C146.402 58.3088 144.371 58.6224 142.148 58.6224C140.309 58.6224 138.56 58.4096 136.913 57.9727C135.266 57.5471 133.776 56.9759 132.445 56.2815C131.113 55.5871 129.929 54.7583 128.868 53.8174C127.807 52.8766 126.927 51.891 126.228 50.8718L129.804 47.0861C131.7 49.1805 133.675 50.6702 135.739 51.5662C137.793 52.451 139.824 52.899 141.833 52.899C144.112 52.899 145.883 52.3726 147.158 51.331C148.433 50.2781 149.065 49.0573 149.065 47.6573C149.065 46.694 148.806 45.854 148.298 45.1596C147.779 44.4652 147.034 43.8044 146.064 43.1884C145.093 42.5723 143.852 41.9115 142.363 41.2171C140.873 40.5227 139.158 39.6267 137.206 38.5514C136.337 38.1258 135.378 37.5546 134.318 36.8602C133.257 36.1658 132.253 35.3257 131.316 34.3625C130.369 33.3993 129.579 32.2793 128.958 31.0136C128.338 29.748 128.022 28.3144 128.022 26.7015C128.022 25.0887 128.349 23.6886 128.992 22.3446C129.646 21.0006 130.549 19.8581 131.711 18.9173C132.873 17.9765 134.295 17.2373 135.976 16.6996C137.658 16.162 139.474 15.8932 141.415 15.8932C144.935 15.8932 147.892 16.6884 150.273 18.2677C152.653 19.8581 154.684 22.1206 156.366 25.0775C155.666 26.2647 154.831 27.3735 153.883 28.4264H153.906Z" fill="white"/>
+      <path d="M169.545 22.9046L162.154 23.3078V18.1445L169.545 17.1813L171.982 5.00653H177.669V17.1813L192.45 17.1029V23.3078L177.669 23.0614V45.798C177.669 47.6797 177.985 49.1021 178.606 50.0765C179.226 51.0398 180.4 51.5326 182.137 51.5326C183.277 51.5326 184.45 51.3086 185.669 50.8494C186.888 50.3901 188.445 49.5725 190.34 48.3853L192.45 52.7422C190.498 54.7359 188.467 56.2143 186.357 57.1775C184.247 58.1407 182.182 58.6336 180.185 58.6336C178.718 58.6336 177.342 58.3648 176.044 57.8271C174.747 57.2895 173.607 56.5391 172.637 55.5647C171.666 54.6014 170.899 53.4366 170.357 52.0926C169.816 50.7485 169.545 49.2701 169.545 47.6573V22.9046Z" fill="white"/>
+      <path d="M205.133 24.0358C205.133 23.5542 205.02 23.1846 204.806 22.9494C204.591 22.703 204.185 22.591 203.587 22.591H199.773L199.367 19.4437L210.335 16.2964L214.724 18.4693L214.069 22.3446C215.909 20.5749 218.007 19.0517 220.366 17.7861C222.724 16.5204 225.251 15.8932 227.959 15.8932C229.313 16.5876 230.453 17.3941 231.367 18.3125C232.292 19.2309 233.105 20.3285 233.804 21.6166C233.15 22.8038 232.337 23.9238 231.367 24.9991C230.397 26.0743 229.257 26.8807 227.959 27.4183C226.933 26.9367 225.985 26.2871 225.116 25.4807C224.247 24.6743 223.491 23.7558 222.837 22.7366C221.81 23.0614 220.772 23.4982 219.745 24.0694C218.718 24.6295 217.77 25.2231 216.902 25.8391C216.033 26.4551 215.288 27.0487 214.667 27.6087C214.047 28.1687 213.596 28.5944 213.325 28.8632V50.4797C213.325 50.8045 213.415 51.107 213.607 51.4094C213.799 51.7006 214.058 51.9022 214.374 52.0142L220.309 53.3806L220.715 57.4127C219.091 57.3567 217.488 57.2783 215.92 57.1663C214.622 57.1663 213.268 57.1439 211.858 57.0879C210.447 57.0319 209.285 57.0095 208.36 57.0095C207.435 57.0095 206.374 57.0319 205.156 57.0879C203.937 57.1439 202.763 57.1663 201.624 57.1663C200.383 57.2783 199.074 57.3567 197.72 57.4127L198.126 53.3806L204.219 51.443L205.11 46.6044V24.0358H205.133Z" fill="white"/>
+      <path d="M248.394 28.5496C247.446 29.5688 246.318 30.3752 245.02 30.9688C243.768 30.3752 242.662 29.5688 241.692 28.5496C240.721 27.5303 239.875 26.3991 239.175 25.1671C240.913 22.2102 243.181 19.9253 246.002 18.3125C248.823 16.6996 252.016 15.8932 255.593 15.8932C257.489 15.8932 259.26 16.1396 260.919 16.6212C262.566 17.1029 264.022 17.8645 265.263 18.8837C266.504 19.9029 267.497 21.1686 268.23 22.6694C268.964 24.1702 269.325 25.9175 269.325 27.9111V50.4909C269.325 50.8158 269.415 51.107 269.607 51.3758C269.799 51.6446 270.081 51.8574 270.464 52.0254L274.605 53.3918L275.012 57.4239C273.601 57.3679 272.191 57.2895 270.792 57.1775C269.596 57.1775 268.366 57.1663 267.091 57.1327C265.816 57.1103 264.721 57.0879 263.796 57.0879C263.582 56.7631 263.39 56.4719 263.232 56.2031C263.017 55.9343 262.814 55.6543 262.622 55.3519C262.431 55.0607 262.261 54.7695 262.092 54.5007C260.524 55.8447 258.854 56.8639 257.094 57.5695C255.333 58.264 253.37 58.6224 251.204 58.6224C249.037 58.6224 247.277 58.3088 245.596 57.6927C243.915 57.0767 242.482 56.2143 241.285 55.1167C240.089 54.019 239.164 52.7086 238.487 51.2078C237.81 49.7069 237.472 48.0605 237.472 46.2908C237.472 44.2524 237.923 42.4043 238.814 40.7691C239.706 39.1338 240.936 37.7338 242.515 36.5802C244.084 35.4265 245.9 34.5193 247.954 33.8809C250.008 33.2313 252.208 32.9177 254.532 32.9177H261.189V28.8072C261.189 26.5447 260.512 24.7639 259.158 23.4422C257.804 22.1318 255.988 21.471 253.72 21.471C252.907 21.471 252.118 21.5494 251.362 21.7174C250.606 21.8742 249.85 22.1766 249.082 22.6022C249.41 23.0278 249.703 23.4646 249.974 23.8902C250.245 24.3158 250.515 24.7527 250.786 25.1783C250.132 26.4103 249.342 27.5415 248.394 28.5496ZM261.189 39.1114L255.017 39.3578C252.253 39.4698 250.087 40.1643 248.518 41.4523C246.95 42.7403 246.16 44.4316 246.16 46.5372C246.16 48.3629 246.781 49.9085 248.033 51.1742C249.274 52.4398 250.899 53.067 252.907 53.067C254.476 53.067 255.931 52.6526 257.252 51.8126C258.583 50.9838 259.892 49.8077 261.189 48.3069V39.1114Z" fill="white"/>
+    </svg>
+  </div>
+
+  <div class="eyebrow"><span class="dot"></span> Free Figma Plugin · Zero API · Zero Limits</div>
+
+  <!-- Title Case headline -->
+  <h1>Fluid Typography<br>Done <span>Mathematically Right</span></h1>
+  <p class="hero-sub">
+    ClampType generates perfect CSS <code style="background:rgba(255,255,255,.11);padding:2px 7px;border-radius:5px;font-family:var(--mono)">clamp()</code> scales from H1 to Caption — then creates Figma Variables and a canvas frame in one click. 20+ global scripts. Zero config.
+  </p>
+  <div class="hero-btns">
+    <a class="btn-p" href="https://www.figma.com/community/plugin/1612318883144152924" target="_blank">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+      Install on Figma — Free
+    </a>
+    <a class="btn-g" href="#how">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      How It Works
+    </a>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat-h"><div class="stat-n">9</div><div class="stat-l">Type Levels</div></div>
+    <div class="stat-d"></div>
+    <div class="stat-h"><div class="stat-n">20+</div><div class="stat-l">Global Scripts</div></div>
+    <div class="stat-d"></div>
+    <div class="stat-h"><div class="stat-n">6</div><div class="stat-l">Ratio Presets</div></div>
+    <div class="stat-d"></div>
+    <div class="stat-h"><div class="stat-n">100%</div><div class="stat-l">Free Forever</div></div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="how-bg" id="how">
+  <div class="container">
+    <div class="s-chip">How It Works</div>
+    <h2 class="s-h">Perfect Scales in <span>Four Steps</span></h2>
+    <p class="s-p">Pure math. No guesswork. No CSS headaches. ClampType runs entirely inside Figma — your data never leaves your machine.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <h3>Pick a Ratio</h3>
+        <p>Choose from 5 classic typographic ratios — Minor Second (1.125) to Perfect Fifth (1.500) — or enter any custom value. Each ratio is a proven musical interval applied to type.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <h3>Set Base &amp; Viewport</h3>
+        <p>Enter your base size (smallest UI size — body/caption level) and viewport range. ClampType computes fluid min and max for every level from H1 down to Caption and CTA.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <h3>Preview &amp; Stress Test</h3>
+        <p>Select any viewport breakpoint to see every type level resize live. Switch to 20+ global scripts — Arabic, Devanagari, Tamil, CJK — to confirm your scale holds globally.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">4</div>
+        <h3>Generate &amp; Ship</h3>
+        <p>One click creates Figma Number Variables (fs/h1 → fs/caption), a canvas documentation frame with all clamp() values, and a ready-to-paste CSS :root block with all 9 classes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="feat-bg" id="features">
+  <div class="container">
+    <div class="s-chip">Full Feature List</div>
+    <h2 class="s-h">Everything Fluid Typography <span>Needs</span></h2>
+    <p class="s-p">Nine type levels, five ratio presets, 20+ scripts, live preview, Figma Variables, canvas frames, and complete CSS output — all free.</p>
+    <div class="feat-grid">
+
+      <div class="feat">
+        <div class="feat-ico" style="background:#FFF2E8;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+        </div>
+        <h3>9-Level Type Scale</h3>
+        <p>H1 through H6, Body, Caption, and CTA — every level computed as a fluid clamp() value. Line heights, font weights, and letter spacing included in CSS output.</p>
+        <div class="tags"><span class="tag">H1–H6</span><span class="tag">Body</span><span class="tag">Caption</span><span class="tag">CTA</span></div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-ico" style="background:#FFF2E8;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>Modular Scale Math</h3>
+        <p>Formula: <code style="background:#FFEEDE;padding:1px 5px;border-radius:3px;font-family:var(--mono);font-size:11px">Sₙ = Base × Ratioⁿ</code>. Five classic ratios plus custom input. Perfect Fifth, Perfect Fourth, Major Third — your type, your choice.</p>
+        <div class="tags"><span class="tag">1.125</span><span class="tag">1.25</span><span class="tag">1.333</span><span class="tag">1.5</span></div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-ico" style="background:#FFF2E8;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <h3>Figma Variables Output</h3>
+        <p>Creates a "ClampType / Typography Scale" collection with one Number Variable per level (fs/h1 … fs/caption). Variables carry min/max px values, descriptions, and code syntax for Web, Android, and iOS.</p>
+        <div class="tags"><span class="tag">Number vars</span><span class="tag">Code syntax</span><span class="tag">FONT_SIZE scope</span></div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-ico" style="background:#FFF2E8;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h16M9 4v16"/></svg>
+        </div>
+        <h3>Canvas Documentation Frame</h3>
+        <p>Generates a 1280px Figma frame with a scale table showing every level — tag, px range, clamp() value, and live Aa sample at min size — plus a dark CSS block at the bottom.</p>
+        <div class="tags"><span class="tag">1280px frame</span><span class="tag">Scale table</span><span class="tag">CSS block</span></div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-ico" style="background:#FFF2E8;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M16.24 7.76l-2.12 2.12M5.64 18.36l2.12-2.12"/></svg>
+        </div>
+        <h3>Live Fluid Preview</h3>
+        <p>Select any breakpoint from 320–1920px to see H1 (or any level) resize fluidly in real time. Instantly see the exact computed px size at any viewport width, with the full clamp() string displayed below.</p>
+        <div class="tags"><span class="tag">Live resize</span><span class="tag">320–1920px</span><span class="tag">Real-time</span></div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-ico" style="background:#FFF2E8;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D46026" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>20+ Script Stress Test</h3>
+        <p>Test your scale with Latin, Arabic, Hebrew, Farsi, Hindi, Marathi, Tamil, Telugu, Kannada, Malayalam, Gujarati, Bengali, Punjabi, Odia, Chinese, Japanese, Korean, Thai, Greek, Cyrillic, and Emoji. RTL support included.</p>
+        <div class="tags"><span class="tag">Indian scripts</span><span class="tag">RTL</span><span class="tag">CJK</span><span class="tag">20+ langs</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCALE DEMO ═══ -->
+<section class="scale-bg" id="scale">
+  <div class="container">
+    <div class="s-chip">Scale Preview</div>
+    <h2 class="s-h">Nine Levels, <span>One Mathematical System</span></h2>
+    <p class="s-p">Every level computed from the same base and ratio. The scale stays harmonious at every viewport width.</p>
+    <div class="scale-demo-grid">
+      <div class="scale-list">
+        <div class="scale-item"><span class="scale-badge">H1</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">56 – 96px · exp ×5</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:95%"></div></div></div></div>
+        <div class="scale-item"><span class="scale-badge">H2</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">45 – 76px · exp ×4</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:76%"></div></div></div></div>
+        <div class="scale-item"><span class="scale-badge">H3</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">36 – 61px · exp ×3</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:60%"></div></div></div></div>
+        <div class="scale-item"><span class="scale-badge">H4</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">29 – 49px · exp ×2</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:48%"></div></div></div></div>
+        <div class="scale-item"><span class="scale-badge">H5</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">23 – 39px · exp ×1</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:38%"></div></div></div></div>
+        <div class="scale-item"><span class="scale-badge">H6</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">16 – 27px · base</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:27%"></div></div></div></div>
+        <div class="scale-item"><span class="scale-badge">Body</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">14 – 22px · exp –1</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:22%"></div></div></div></div>
+        <div class="scale-item"><span class="scale-badge">Caption</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">11 – 18px · exp –2</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:17%"></div></div></div></div>
+        <div class="scale-item"><span class="scale-badge">CTA</span><div class="scale-bar-wrap"><div class="scale-bar-lbl">16 – 27px · same as H6</div><div class="scale-bar-bg"><div class="scale-bar-fill" style="width:27%"></div></div></div></div>
+      </div>
+      <div class="scale-demo-visual">
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,169,93,.5);margin-bottom:5px;font-family:var(--mono)">Live Scale · Major Third · Base 16px</div>
+        <div class="scale-vis-row"><span class="scale-vis-tag">H1</span><span class="scale-vis-sample" style="font-size:34px">ClampType</span></div>
+        <div class="scale-vis-row"><span class="scale-vis-tag">H2</span><span class="scale-vis-sample" style="font-size:27px">Typography Scale</span></div>
+        <div class="scale-vis-row"><span class="scale-vis-tag">H3</span><span class="scale-vis-sample" style="font-size:22px">Fluid &amp; Responsive</span></div>
+        <div class="scale-vis-row"><span class="scale-vis-tag">H4</span><span class="scale-vis-sample" style="font-size:17px">Mathematical Ratios</span></div>
+        <div class="scale-vis-row"><span class="scale-vis-tag">H5</span><span class="scale-vis-sample" style="font-size:14px">Figma Variables Included</span></div>
+        <div class="scale-vis-row"><span class="scale-vis-tag">H6</span><span class="scale-vis-sample" style="font-size:12px">Ready-to-Paste CSS clamp()</span></div>
+        <div class="scale-vis-row"><span class="scale-vis-tag">Body</span><span class="scale-vis-sample" style="font-size:10px;font-weight:400;opacity:0.82">The quick brown fox jumps over the lazy dog</span></div>
+        <div class="scale-vis-row"><span class="scale-vis-tag">Caption</span><span class="scale-vis-sample" style="font-size:8.5px;font-weight:400;opacity:0.6">12 Aug 2026 · Created with ClampType by Elustra</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ OUTPUTS ═══ -->
+<section class="out-bg" id="outputs">
+  <div class="container">
+    <div class="s-chip">What You Get</div>
+    <h2 class="s-h">Three Outputs, <span>One Click</span></h2>
+    <p class="s-p">Every run automatically produces all three output formats. Copy, apply, or download — instantly.</p>
+    <div class="out-grid">
+      <div class="out-card">
+        <div class="out-ext" style="background:#FFF2E8;color:#D46026">.fig</div>
+        <h3>Figma Variables</h3>
+        <ul>
+          <li>ClampType / Typography Scale collection</li>
+          <li>One Number Variable per type level</li>
+          <li>FONT_SIZE scope for auto-binding</li>
+          <li>Code syntax for Web, Android, iOS</li>
+          <li>Min px value stored per variable</li>
+        </ul>
+      </div>
+      <div class="out-card">
+        <div class="out-ext" style="background:#FFF2E8;color:#D46026">.fig</div>
+        <h3>Canvas Frame</h3>
+        <ul>
+          <li>1280px documentation frame</li>
+          <li>Scale table with all 9 levels</li>
+          <li>px range + clamp() per row</li>
+          <li>Live Aa sample at min size</li>
+          <li>Dark CSS :root block at bottom</li>
+        </ul>
+      </div>
+      <div class="out-card">
+        <div class="out-ext" style="background:#FFF2E8;color:#D46026">.css</div>
+        <h3>CSS Variables</h3>
+        <ul>
+          <li>:root block with all 9 --fs-* vars</li>
+          <li>Class definitions .h1 → .caption</li>
+          <li>Line-height + font-weight per class</li>
+          <li>Letter-spacing for CTA class</li>
+          <li>Copy to clipboard in one click</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCRIPTS ═══ -->
+<section class="scripts-bg" id="scripts">
+  <div class="container" style="text-align:center">
+    <div class="s-chip">Global Script Support</div>
+    <h2 class="s-h">20+ Scripts, <span>Your Scale Holds</span></h2>
+    <p class="s-p" style="margin:0 auto">From German compound words to Devanagari conjuncts to CJK ideographs — test your type scale against the world's writing systems.</p>
+    <div class="scripts-row">
+      <div class="script-item"><span class="script-flag">🇺🇸</span><span class="script-name">English</span><span class="script-script">Latin</span></div>
+      <div class="script-item"><span class="script-flag">🇩🇪</span><span class="script-name">German</span><span class="script-script">+30% width</span></div>
+      <div class="script-item"><span class="script-flag">🇸🇦</span><span class="script-name">Arabic</span><span class="script-script">RTL</span></div>
+      <div class="script-item"><span class="script-flag">🇮🇱</span><span class="script-name">Hebrew</span><span class="script-script">RTL</span></div>
+      <div class="script-item"><span class="script-flag">🇮🇳</span><span class="script-name">Hindi</span><span class="script-script">Devanagari</span></div>
+      <div class="script-item"><span class="script-flag">🇮🇳</span><span class="script-name">Tamil</span><span class="script-script">தமிழ்</span></div>
+      <div class="script-item"><span class="script-flag">🇮🇳</span><span class="script-name">Telugu</span><span class="script-script">తెలుగు</span></div>
+      <div class="script-item"><span class="script-flag">🇮🇳</span><span class="script-name">Bengali</span><span class="script-script">বাংলা</span></div>
+      <div class="script-item"><span class="script-flag">🇨🇳</span><span class="script-name">Chinese</span><span class="script-script">CJK</span></div>
+      <div class="script-item"><span class="script-flag">🇯🇵</span><span class="script-name">Japanese</span><span class="script-script">Mixed Kana</span></div>
+      <div class="script-item"><span class="script-flag">🇰🇷</span><span class="script-name">Korean</span><span class="script-script">한글</span></div>
+      <div class="script-item"><span class="script-flag">🇷🇺</span><span class="script-name">Russian</span><span class="script-script">Cyrillic</span></div>
+    </div>
+    <p style="margin-top:18px;font-size:12.5px;color:var(--ink3)">+ Finnish, Dutch, Persian, Gujarati, Kannada, Malayalam, Punjabi, Odia, Thai, Greek, Ukrainian, Emoji &amp; more</p>
+  </div>
+</section>
+
+<!-- ═══ FREE CTA ═══ -->
+<section class="free-bg">
+  <div class="container">
+    <div class="s-chip">100% Free · Forever</div>
+    <h2 class="s-h">No Subscriptions.<br>No API Keys. No Limits.</h2>
+    <p class="s-p">ClampType runs entirely inside Figma's sandbox. Your data never leaves your machine. Generate unlimited type scales, forever.</p>
+    <div class="hero-btns">
+      <a class="btn-p" href="https://www.figma.com/community/plugin/1612318883144152924" target="_blank">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+        Install on Figma — Free
+      </a>
+    </div>
+    <div class="perks">
+      <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>Zero API Keys</div>
+      <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>Runs Inside Figma Sandbox</div>
+      <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>No Data Collection</div>
+      <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>Unlimited Generations</div>
+      <div class="perk"><div class="perk-ck"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1.5 5l2.5 2.5 4.5-4.5"/></svg></div>Free Forever</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="ft-inner">
+    <div class="ft-top">
+      <!-- Brand column -->
+      <div class="ft-brand">
+        <div class="fb-logo">
+          <div class="fb-logo-icon">
+            <svg viewBox="0 0 78 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.9233 6.75L20.9409 6.98047L21.2671 11.2109L21.2876 11.4795H21.0181C18.5728 11.4795 16.7978 12.0161 15.646 13.043L15.645 13.0439C14.5193 14.0435 13.7603 15.4242 13.3784 17.2041C13.0351 19.0063 12.8628 21.0491 12.8628 23.334V50.666C12.8628 52.9068 13.035 54.9497 13.3784 56.7959L13.4546 57.125C13.8568 58.7469 14.5897 60.019 15.645 60.9561L15.646 60.957C16.7978 61.9839 18.5728 62.5205 21.0181 62.5205H21.2876L21.2671 62.7891L20.9409 67.0195L20.9233 67.25H20.6919C17.2821 67.25 14.5835 66.7052 12.6196 65.5908V65.5898C10.691 64.5141 9.30913 62.7695 8.46729 60.3799C7.63076 58.0052 7.12892 54.8978 6.95459 51.0674C6.78062 47.2013 6.69385 42.512 6.69385 37C6.69385 31.4448 6.78062 26.7554 6.95459 22.9326C7.12892 19.1022 7.63076 15.9948 8.46729 13.6201C9.3094 11.2297 10.692 9.48382 12.6216 8.4082C14.5853 7.29455 17.2832 6.75002 20.6919 6.75H20.9233Z" fill="white"/>
+              <path d="M57.1958 6.75C60.6014 6.75002 63.2774 7.29382 65.1987 8.40723C67.172 9.48219 68.5776 11.2279 69.4204 13.6201C70.2569 15.9948 70.7588 19.1022 70.9331 22.9326C71.1071 26.7554 71.1938 31.4448 71.1938 37C71.1938 42.512 71.1071 47.2013 70.9331 51.0674C70.7588 54.8978 70.2569 58.0052 69.4204 60.3799C68.5777 62.772 67.1728 64.5178 65.1997 65.5928L65.1987 65.5918C63.2774 66.7054 60.6017 67.25 57.1958 67.25H56.9644L56.9468 67.0195L56.6206 62.7891L56.6001 62.5205H56.8696C59.3609 62.5205 61.1325 61.983 62.2388 60.96L62.2427 60.9561C63.3668 59.958 64.1037 58.5795 64.4429 56.8018L64.4438 56.7969L64.5796 56.0957C64.876 54.4373 65.0249 52.6277 65.0249 50.666V23.334C65.0249 21.0484 64.8304 19.0055 64.4438 17.2041L64.4429 17.1982C64.1037 15.4205 63.3668 14.042 62.2427 13.0439L62.2388 13.04C61.1325 12.017 59.3609 11.4795 56.8696 11.4795H56.6001L56.6206 11.2109L56.9468 6.98047L56.9644 6.75H57.1958Z" fill="white"/>
+              <path d="M51.5562 13.9082V18.9639H41.978V59.9619H35.8745V18.9639H26.2964V13.9082H51.5562Z" fill="white"/>
+            </svg>
+          </div>
+          <span class="fb-name">ClampType</span>
+        </div>
+        <p class="fb-desc">Free fluid typography scale generator for Figma. Generate mathematically perfect CSS clamp() scales, Figma Variables, and canvas frames — 9 type levels, 20+ global scripts, zero API.</p>
+        <div class="fb-elustra">
+          <span class="fb-elustra-lbl">Presented by</span>
+          <!-- Elustra footer — all 7 paths, white, readable size -->
+          <svg class="fb-elustra-logo" viewBox="0 0 275 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Elustra">
+            <path d="M15.1085 25.5591L34.8545 25.2343V32.1673L15.1085 31.8425V50.4685H31.9209L36.7953 49.5837L38.7473 42.4827L42.8094 42.0795C42.753 43.0987 42.6965 44.174 42.6514 45.3052C42.595 46.2684 42.5386 47.3101 42.4934 48.4077C42.437 49.5053 42.4145 50.6029 42.4145 51.6782C42.4145 52.5966 42.437 53.5486 42.4934 54.5455C42.5499 55.5423 42.6063 56.4159 42.6514 57.1663C42.7078 58.1296 42.753 59.0704 42.8094 59.9888L38.7473 59.5072L38.4201 58.4544C38.2621 58.1296 38.0365 57.8719 37.7657 57.6927C37.4949 57.5023 37.2015 57.4127 36.8743 57.4127H0.0789841L0.485188 53.3806L5.1114 51.5214L6.65723 47.6461V9.43065C6.65723 9.16185 6.58953 8.89304 6.45413 8.62423C6.31873 8.35542 6.05921 8.16502 5.68685 8.06422L0.406204 6.60818L0 2.57607H33.6359C33.9632 2.57607 34.2565 2.49767 34.5273 2.32966C34.7981 2.17286 35.0125 1.90405 35.1818 1.52324L35.43 0.470413L39.492 -0.0112C39.4356 0.851223 39.3792 1.71365 39.3341 2.56487C39.2777 3.25929 39.2212 4.06571 39.1761 4.98413C39.131 5.90256 39.0971 6.80978 39.0971 7.72821C39.0971 8.80344 39.1197 9.87866 39.1761 10.9539C39.2325 12.0291 39.2889 13.0259 39.3341 13.9332C39.3905 14.8964 39.4469 15.8708 39.492 16.8341L35.43 16.4308L33.478 10.3827L28.6035 9.49785H15.9209L15.1085 13.3732V25.5591Z" fill="rgba(255,255,255,0.55)"/>
+            <path d="M57.9287 7.90741C57.9287 7.42579 57.8159 7.05618 57.6015 6.82098C57.3871 6.57457 56.9809 6.46257 56.3829 6.46257H52.5691L52.1629 3.31528L63.1191 0.156799L67.5084 2.32966L66.1318 9.99066V50.4797C66.1318 50.8045 66.2221 51.107 66.4139 51.4094C66.6057 51.7006 66.8652 51.9022 67.1812 52.0142L72.3038 53.3806L72.71 57.4127C71.2432 57.3567 69.7876 57.2783 68.3208 57.1663C67.0796 57.1663 65.8046 57.1439 64.507 57.0879C63.2094 57.0319 62.0923 57.0095 61.1784 57.0095C60.2644 57.0095 59.1925 57.0319 57.9739 57.0879C56.7553 57.1439 55.5818 57.1663 54.4422 57.1663C53.201 57.2783 51.8921 57.3567 50.5381 57.4127L50.9443 53.3806L57.0373 51.443L57.9287 46.6044V7.90741Z" fill="rgba(255,255,255,0.55)"/>
+            <path d="M77.1787 22.5798L76.7725 19.4325L87.8979 16.2852L92.2872 18.4581L90.8203 26.1191V46.0332C90.8203 48.1277 91.1927 49.6509 91.96 50.5918C92.716 51.5326 93.8556 52.003 95.3676 52.003C96.6087 52.003 97.8951 51.723 99.2265 51.1518C100.558 50.5918 101.81 49.9421 103.006 49.2141C104.191 48.4861 105.241 47.7805 106.132 47.0749C107.023 46.3692 107.633 45.8652 107.96 45.5404V24.0359C107.96 23.5542 107.847 23.1846 107.633 22.9494C107.418 22.703 107.012 22.591 106.414 22.591H102.431L102.025 19.4437L113.15 16.2964L117.54 18.4693L116.073 26.1303V50.4798C116.073 50.8046 116.163 51.0958 116.355 51.3646C116.547 51.6334 116.829 51.8462 117.212 52.0142L121.353 53.3806L121.76 57.4127C120.349 57.3567 118.939 57.2783 117.54 57.1663C116.343 57.1663 115.114 57.1551 113.839 57.1215C112.564 57.0991 111.469 57.0767 110.544 57.0767L107.621 52.7198L107.7 51.5886C105.692 53.5262 103.379 55.1727 100.75 56.5503C98.1207 57.9168 95.3789 58.6112 92.5016 58.6112C89.3648 58.6112 86.9388 57.6815 85.235 55.8335C83.5312 53.9854 82.6737 51.275 82.6737 47.7245V24.0359C82.6737 23.5542 82.5609 23.1846 82.3465 22.9494C82.1321 22.703 81.7259 22.591 81.1279 22.591H77.1448L77.1787 22.5798Z" fill="rgba(255,255,255,0.55)"/>
+            <path d="M153.906 28.4264C152.958 29.4792 151.83 30.2632 150.532 30.8008C149.28 30.2632 148.174 29.468 147.203 28.4264C146.233 27.3735 145.421 26.2647 144.766 25.0775C145.037 24.5959 145.33 24.1254 145.658 23.6662C145.985 23.207 146.335 22.7702 146.718 22.3334C145.962 22.0086 145.24 21.7846 144.563 21.6502C143.886 21.5158 143.164 21.4486 142.408 21.4486C140.512 21.4486 139.012 21.8518 137.895 22.6582C136.789 23.4646 136.225 24.4838 136.225 25.7271C136.225 26.5895 136.507 27.3847 137.082 28.1015C137.646 28.8296 138.391 29.5128 139.316 30.1624C140.242 30.812 141.347 31.4504 142.645 32.1001C143.943 32.7497 145.33 33.4441 146.786 34.1945C148.14 34.8889 149.449 35.6393 150.724 36.4122C151.999 37.1962 153.105 38.0474 154.052 38.9882C155 39.9291 155.768 41.0267 156.366 42.2923C156.964 43.558 157.257 45.0252 157.257 46.6828C157.257 48.3405 156.896 49.9085 156.162 51.3646C155.429 52.8206 154.391 54.075 153.037 55.1503C151.683 56.2255 150.081 57.0767 148.242 57.6927C146.402 58.3088 144.371 58.6224 142.148 58.6224C140.309 58.6224 138.56 58.4096 136.913 57.9727C135.266 57.5471 133.776 56.9759 132.445 56.2815C131.113 55.5871 129.929 54.7583 128.868 53.8174C127.807 52.8766 126.927 51.891 126.228 50.8718L129.804 47.0861C131.7 49.1805 133.675 50.6702 135.739 51.5662C137.793 52.451 139.824 52.899 141.833 52.899C144.112 52.899 145.883 52.3726 147.158 51.331C148.433 50.2781 149.065 49.0573 149.065 47.6573C149.065 46.694 148.806 45.854 148.298 45.1596C147.779 44.4652 147.034 43.8044 146.064 43.1884C145.093 42.5723 143.852 41.9115 142.363 41.2171C140.873 40.5227 139.158 39.6267 137.206 38.5514C136.337 38.1258 135.378 37.5546 134.318 36.8602C133.257 36.1658 132.253 35.3257 131.316 34.3625C130.369 33.3993 129.579 32.2793 128.958 31.0136C128.338 29.748 128.022 28.3144 128.022 26.7015C128.022 25.0887 128.349 23.6886 128.992 22.3446C129.646 21.0006 130.549 19.8581 131.711 18.9173C132.873 17.9765 134.295 17.2373 135.976 16.6996C137.658 16.162 139.474 15.8932 141.415 15.8932C144.935 15.8932 147.892 16.6884 150.273 18.2677C152.653 19.8581 154.684 22.1206 156.366 25.0775C155.666 26.2647 154.831 27.3735 153.883 28.4264H153.906Z" fill="rgba(255,255,255,0.55)"/>
+            <path d="M169.545 22.9046L162.154 23.3078V18.1445L169.545 17.1813L171.982 5.00653H177.669V17.1813L192.45 17.1029V23.3078L177.669 23.0614V45.798C177.669 47.6797 177.985 49.1021 178.606 50.0765C179.226 51.0398 180.4 51.5326 182.137 51.5326C183.277 51.5326 184.45 51.3086 185.669 50.8494C186.888 50.3901 188.445 49.5725 190.34 48.3853L192.45 52.7422C190.498 54.7359 188.467 56.2143 186.357 57.1775C184.247 58.1407 182.182 58.6336 180.185 58.6336C178.718 58.6336 177.342 58.3648 176.044 57.8271C174.747 57.2895 173.607 56.5391 172.637 55.5647C171.666 54.6014 170.899 53.4366 170.357 52.0926C169.816 50.7485 169.545 49.2701 169.545 47.6573V22.9046Z" fill="rgba(255,255,255,0.55)"/>
+            <path d="M205.133 24.0358C205.133 23.5542 205.02 23.1846 204.806 22.9494C204.591 22.703 204.185 22.591 203.587 22.591H199.773L199.367 19.4437L210.335 16.2964L214.724 18.4693L214.069 22.3446C215.909 20.5749 218.007 19.0517 220.366 17.7861C222.724 16.5204 225.251 15.8932 227.959 15.8932C229.313 16.5876 230.453 17.3941 231.367 18.3125C232.292 19.2309 233.105 20.3285 233.804 21.6166C233.15 22.8038 232.337 23.9238 231.367 24.9991C230.397 26.0743 229.257 26.8807 227.959 27.4183C226.933 26.9367 225.985 26.2871 225.116 25.4807C224.247 24.6743 223.491 23.7558 222.837 22.7366C221.81 23.0614 220.772 23.4982 219.745 24.0694C218.718 24.6295 217.77 25.2231 216.902 25.8391C216.033 26.4551 215.288 27.0487 214.667 27.6087C214.047 28.1687 213.596 28.5944 213.325 28.8632V50.4797C213.325 50.8045 213.415 51.107 213.607 51.4094C213.799 51.7006 214.058 51.9022 214.374 52.0142L220.309 53.3806L220.715 57.4127C219.091 57.3567 217.488 57.2783 215.92 57.1663C214.622 57.1663 213.268 57.1439 211.858 57.0879C210.447 57.0319 209.285 57.0095 208.36 57.0095C207.435 57.0095 206.374 57.0319 205.156 57.0879C203.937 57.1439 202.763 57.1663 201.624 57.1663C200.383 57.2783 199.074 57.3567 197.72 57.4127L198.126 53.3806L204.219 51.443L205.11 46.6044V24.0358H205.133Z" fill="rgba(255,255,255,0.55)"/>
+            <path d="M248.394 28.5496C247.446 29.5688 246.318 30.3752 245.02 30.9688C243.768 30.3752 242.662 29.5688 241.692 28.5496C240.721 27.5303 239.875 26.3991 239.175 25.1671C240.913 22.2102 243.181 19.9253 246.002 18.3125C248.823 16.6996 252.016 15.8932 255.593 15.8932C257.489 15.8932 259.26 16.1396 260.919 16.6212C262.566 17.1029 264.022 17.8645 265.263 18.8837C266.504 19.9029 267.497 21.1686 268.23 22.6694C268.964 24.1702 269.325 25.9175 269.325 27.9111V50.4909C269.325 50.8158 269.415 51.107 269.607 51.3758C269.799 51.6446 270.081 51.8574 270.464 52.0254L274.605 53.3918L275.012 57.4239C273.601 57.3679 272.191 57.2895 270.792 57.1775C269.596 57.1775 268.366 57.1663 267.091 57.1327C265.816 57.1103 264.721 57.0879 263.796 57.0879C263.582 56.7631 263.39 56.4719 263.232 56.2031C263.017 55.9343 262.814 55.6543 262.622 55.3519C262.431 55.0607 262.261 54.7695 262.092 54.5007C260.524 55.8447 258.854 56.8639 257.094 57.5695C255.333 58.264 253.37 58.6224 251.204 58.6224C249.037 58.6224 247.277 58.3088 245.596 57.6927C243.915 57.0767 242.482 56.2143 241.285 55.1167C240.089 54.019 239.164 52.7086 238.487 51.2078C237.81 49.7069 237.472 48.0605 237.472 46.2908C237.472 44.2524 237.923 42.4043 238.814 40.7691C239.706 39.1338 240.936 37.7338 242.515 36.5802C244.084 35.4265 245.9 34.5193 247.954 33.8809C250.008 33.2313 252.208 32.9177 254.532 32.9177H261.189V28.8072C261.189 26.5447 260.512 24.7639 259.158 23.4422C257.804 22.1318 255.988 21.471 253.72 21.471C252.907 21.471 252.118 21.5494 251.362 21.7174C250.606 21.8742 249.85 22.1766 249.082 22.6022C249.41 23.0278 249.703 23.4646 249.974 23.8902C250.245 24.3158 250.515 24.7527 250.786 25.1783C250.132 26.4103 249.342 27.5415 248.394 28.5496ZM261.189 39.1114L255.017 39.3578C252.253 39.4698 250.087 40.1643 248.518 41.4523C246.95 42.7403 246.16 44.4316 246.16 46.5372C246.16 48.3629 246.781 49.9085 248.033 51.1742C249.274 52.4398 250.899 53.067 252.907 53.067C254.476 53.067 255.931 52.6526 257.252 51.8126C258.583 50.9838 259.892 49.8077 261.189 48.3069V39.1114Z" fill="rgba(255,255,255,0.55)"/>
+          </svg>
+        </div>
+      </div>
+      <!-- Quick links column -->
+      <div class="ft-links">
+        <a class="ft-link" href="#how">How It Works</a>
+        <a class="ft-link" href="#features">Features</a>
+        <a class="ft-link" href="#outputs">Outputs</a>
+        <a class="ft-link" href="#scripts">Scripts</a>
+        <a class="ft-link" href="https://www.figma.com/community/plugin/1612318883144152924" target="_blank">Install on Figma</a>
+        <a class="ft-link" href="https://wa.me/918888241144" target="_blank">Contact Us</a>
+      </div>
+    </div>
+    <!-- Bottom copyright bar -->
+    <div class="fb-bot">
+      <span class="fb-copy">© Copyright Elustra 2026 | Mithil Mogare · All rights reserved</span>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP STICKY -->
+<a class="wa-sticky" href="https://wa.me/918888241144?text=Hi%21%20I%20need%20help%20with%20ClampType." target="_blank" rel="noopener noreferrer">
+  <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a9 9 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.125.557 4.12 1.529 5.855L0 24l6.335-1.51A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.945 9.945 0 0 1-5.193-1.374L3 21.5l.893-3.667A9.959 9.959 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+  </svg>
+  <div class="wa-label">
+    <span class="wa-label-main">Contact Us</span>
+    <span class="wa-label-sub">+91 88882 41144</span>
+  </div>
+</a>
+
+<script>
+function toggleMenu(){
+  document.getElementById('ham').classList.toggle('open');
+  document.getElementById('drawer').classList.toggle('open');
+}
+function closeMenu(){
+  document.getElementById('ham').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('nav')&&!e.target.closest('.nav-drawer')){closeMenu();}
+});
+</script>
+</body>
+</html>

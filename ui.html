@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>ClampType</title>
+
+<style>
+:root{
+  --accent:#D46026;
+  --accent-lt:#F26A2F;
+  --accent-dk:#B03A10;
+  --amber:#FD9651;
+  --red:#DB3E1D;
+  --ink:#2D1208;
+  --ink2:#7A3920;
+  --ink3:#B07054;
+  --bg:#FFF8F2;
+  --surf:#FFFFFF;
+  --surf2:#FFF4EC;
+  --surf3:#FFEEDE;
+  --hdr:#FBF5EE;
+  --bdr:rgba(212,96,38,.13);
+  --bdr2:rgba(212,96,38,.24);
+  --font:'Inter','Inter UI',system-ui,-apple-system,sans-serif;
+  --mono:'SF Mono','Fira Code','Consolas','Courier New',monospace;
+  --r:9px;
+  --rs:7px;
+  --sh:0 1px 3px rgba(45,18,8,.07),0 1px 2px rgba(45,18,8,.04);
+  --shf:0 0 0 3px rgba(212,96,38,.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── ROOT LAYOUT ── */
+html{
+  width:560px;
+  height:100%;
+  overflow:hidden;
+}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--ink);
+  width:560px;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  font-size:14px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden; /* no body scroll — only .body scrolls */
+}
+
+/* ── HEADER ── */
+.hdr{
+  background:var(--hdr);
+  border-bottom:1.5px solid var(--bdr2);
+  padding:11px 18px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-shrink:0;
+  width:100%;
+}
+/* Left: ClampType logo + name */
+.logo-wrap{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.ct-icon{
+  width:32px;
+  height:30px;
+  flex-shrink:0;
+  background:#D46026;
+  border-radius:7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:5px;
+}
+.ct-icon svg{
+  width:22px;
+  height:20px;
+  display:block;
+}
+.logo-text{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+}
+.logo-name{
+  font-size:14px;
+  font-weight:700;
+  color:var(--ink);
+  letter-spacing:-.25px;
+  line-height:1;
+}
+.logo-sub{
+  font-size:9px;
+  font-weight:500;
+  color:var(--ink3);
+  letter-spacing:.3px;
+}
+/* Right: Elustra full wordmark */
+.e-side{
+  display:flex;
+  align-items:center;
+}
+/* Elustra wordmark — full 7-letter SVG, colored #D46026 */
+.e-logo{
+  height:16px;
+  width:auto;
+  flex-shrink:0;
+  display:block;
+}
+
+/* ── SCROLLABLE BODY ── */
+.body{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background:var(--bg);
+  scrollbar-width:thin;
+  scrollbar-color:rgba(212,96,38,.2) transparent;
+  /* single scroll — no nested overflow on children */
+}
+.body::-webkit-scrollbar{width:4px;}
+.body::-webkit-scrollbar-thumb{background:rgba(212,96,38,.2);border-radius:4px;}
+
+/* ── SECTION STRUCTURE ── */
+.sec{padding:14px 18px 0;}
+.sec-last{padding-bottom:18px;}
+.sep{height:1px;background:var(--bdr);margin:14px 18px 0;}
+.sec-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.sec-pip{width:3px;height:13px;border-radius:2px;background:#D46026;flex-shrink:0;}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--ink3);}
+.sec-info{font-size:9px;font-weight:600;color:var(--ink3);margin-left:auto;background:var(--surf3);border:1px solid var(--bdr2);border-radius:5px;padding:2px 7px;}
+
+/* ── RATIO TILES ── */
+.ratio-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.ratio-tile{
+  background:var(--surf);
+  border:1.5px solid var(--bdr2);
+  border-radius:var(--rs);
+  padding:9px 4px 7px;
+  cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  box-shadow:var(--sh);
+  user-select:none;
+  transition:border-color .13s,background .13s,transform .13s;
+}
+.ratio-tile:hover:not(.on){border-color:#D46026;background:var(--surf2);transform:translateY(-1px);}
+.ratio-tile.on{background:#D46026;border-color:#D46026;}
+.ratio-val{font-size:11.5px;font-weight:700;color:var(--ink);transition:color .13s;}
+.ratio-name{font-size:7.5px;font-weight:600;letter-spacing:.2px;color:var(--ink3);transition:color .13s;}
+.ratio-tile.on .ratio-val,.ratio-tile.on .ratio-name{color:#fff;}
+
+/* ── INPUTS ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.inp-wrap{display:flex;flex-direction:column;gap:4px;}
+.inp-label{font-size:10.5px;font-weight:600;color:var(--ink2);}
+.inp-shell{
+  display:flex;align-items:center;
+  background:var(--surf);border:1.5px solid var(--bdr2);
+  border-radius:var(--rs);box-shadow:var(--sh);overflow:hidden;
+  transition:border-color .13s,box-shadow .13s;
+}
+.inp-shell:focus-within{border-color:#D46026;box-shadow:var(--shf);}
+.inp-in{flex:1;border:none;outline:none;padding:8px 10px;font-family:var(--font);font-size:13px;font-weight:600;color:var(--ink);background:transparent;min-width:0;}
+.inp-in::placeholder{color:var(--ink3);font-weight:400;}
+.inp-unit{padding:0 10px 0 0;font-size:11px;font-weight:600;color:var(--ink3);flex-shrink:0;user-select:none;}
+
+/* ── SELECTS ── */
+.sel-shell{
+  position:relative;
+  display:flex;align-items:center;
+  background:var(--surf);border:1.5px solid var(--bdr2);
+  border-radius:var(--rs);box-shadow:var(--sh);overflow:hidden;
+  transition:border-color .13s,box-shadow .13s;
+}
+.sel-shell:focus-within{border-color:#D46026;box-shadow:var(--shf);}
+.sel-in{
+  flex:1;border:none;outline:none;
+  padding:8px 28px 8px 10px;
+  font-family:var(--font);font-size:12px;font-weight:600;color:var(--ink);
+  background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer;
+}
+.sel-arrow{position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--ink3);}
+
+/* ── SCALE TABLE ── */
+.scale-table{
+  background:var(--surf);border:1.5px solid var(--bdr);
+  border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);
+  width:100%; /* never overflow */
+  table-layout:fixed;
+}
+.scale-row{
+  display:grid;
+  grid-template-columns:46px minmax(0,1fr) minmax(0,1fr) 76px minmax(0,1.1fr);
+  border-bottom:1px solid var(--bdr);
+  align-items:center;
+  min-height:40px;
+}
+.scale-row:last-child{border-bottom:none;}
+.scale-row-hdr{background:var(--surf3);min-height:26px;}
+.sc-tag{padding:4px 6px;font-size:11px;font-weight:700;color:#D46026;}
+.sc-hdr{font-size:8.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);}
+.sc-preview{
+  padding:4px 5px 4px 3px;
+  font-weight:500;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  line-height:1.1;
+}
+.sc-range{padding:4px 5px;font-size:10px;font-weight:500;color:var(--ink2);font-family:var(--mono);white-space:nowrap;}
+.sc-clamp{padding:4px 6px 4px 3px;font-size:9px;color:var(--ink3);font-family:var(--mono);word-break:break-all;line-height:1.3;}
+
+/* ── FLUID PREVIEW ── */
+.fluid-wrap{background:var(--surf);border:1.5px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.fluid-top{background:#D46026;padding:9px 14px;display:flex;justify-content:space-between;align-items:center;}
+.fluid-lbl{font-size:11px;font-weight:700;color:#fff;}
+.fluid-size{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px;font-family:var(--mono);}
+.fluid-vp-row{padding:9px 14px 7px;display:flex;align-items:center;gap:9px;border-top:1px solid var(--bdr);}
+.fluid-vp-label{font-size:10.5px;font-weight:600;color:var(--ink2);white-space:nowrap;}
+.fluid-vp-sel{
+  flex:1;border:1.5px solid var(--bdr2);border-radius:var(--rs);
+  background:var(--surf);padding:5px 24px 5px 9px;
+  font-family:var(--font);font-size:11.5px;font-weight:700;color:#D46026;
+  -webkit-appearance:none;appearance:none;cursor:pointer;outline:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23B07054' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 6px center;
+  transition:border-color .13s;
+}
+.fluid-vp-sel:focus{border-color:#D46026;box-shadow:var(--shf);}
+.fluid-sample-wrap{padding:14px 18px;min-height:60px;display:flex;align-items:center;justify-content:center;}
+.fluid-sample{font-weight:500;color:var(--ink);line-height:1.15;text-align:center;}
+.fluid-clamp-row{padding:0 14px 8px;font-size:10px;font-family:var(--mono);color:var(--ink3);}
+.fluid-lvl-row{padding:6px 14px 10px;display:flex;flex-wrap:wrap;gap:4px;}
+.fl-btn{
+  padding:3px 9px;font-family:var(--font);font-size:10px;font-weight:600;
+  border:1.5px solid var(--bdr2);border-radius:100px;cursor:pointer;
+  background:var(--surf2);color:var(--ink2);transition:all .12s;
+}
+.fl-btn.on{background:#D46026;color:#fff;border-color:#D46026;}
+.fl-btn:hover:not(.on){border-color:#D46026;color:#D46026;}
+
+/* ── CUSTOM TEXT ── */
+.ct-wrap{padding:0 18px 12px;}
+.ct-shell{
+  display:flex;align-items:center;
+  background:var(--surf);border:1.5px solid var(--bdr2);
+  border-radius:var(--rs);box-shadow:var(--sh);overflow:hidden;
+  transition:border-color .13s,box-shadow .13s;
+}
+.ct-shell:focus-within{border-color:#D46026;box-shadow:var(--shf);}
+.ct-pre{padding:0 4px 0 11px;font-size:10.5px;font-weight:600;color:var(--ink3);flex-shrink:0;}
+.ct-in{flex:1;border:none;outline:none;padding:8px 9px;font-family:var(--font);font-size:12.5px;font-weight:500;color:var(--ink);background:transparent;}
+.ct-in::placeholder{color:var(--ink3);font-weight:400;font-size:11.5px;}
+.ct-hint{font-size:9.5px;color:var(--ink3);padding:4px 1px 0;line-height:1.5;}
+
+/* ── SCRIPTS ── */
+.scripts-wrap{background:var(--surf);border:1.5px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.scripts-top{padding:8px 13px;display:flex;align-items:center;gap:8px;background:var(--surf3);border-bottom:1px solid var(--bdr);}
+.sc-dd-label{font-size:10.5px;font-weight:600;color:var(--ink2);white-space:nowrap;}
+.sc-dd{
+  flex:1;border:1.5px solid var(--bdr2);border-radius:var(--rs);
+  background:var(--surf);padding:5px 24px 5px 9px;
+  font-family:var(--font);font-size:12px;font-weight:700;color:#D46026;
+  -webkit-appearance:none;appearance:none;cursor:pointer;outline:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23B07054' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 6px center;
+  transition:border-color .13s;
+}
+.sc-dd:focus{border-color:#D46026;box-shadow:var(--shf);}
+.sc-badge{font-size:9.5px;font-weight:700;color:var(--ink3);background:var(--surf);border:1px solid var(--bdr);border-radius:5px;padding:2px 7px;white-space:nowrap;}
+.sc-body{padding:12px 15px 14px;}
+.sc-text{font-size:15px;font-weight:500;line-height:1.6;color:var(--ink);}
+.sc-meta{font-size:9.5px;color:var(--ink3);margin-top:5px;}
+
+/* ── CSS OUTPUT BOX ── */
+.css-box{background:#1C0E06;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.css-hdr{background:rgba(255,255,255,.05);padding:7px 13px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.07);}
+.css-hdr-lbl{font-size:10.5px;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.4px;}
+.copy-btn{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(212,96,38,.22);border:1px solid rgba(212,96,38,.38);
+  border-radius:100px;padding:3px 11px;cursor:pointer;
+  font-family:var(--font);font-size:10.5px;font-weight:700;color:#FD9651;
+  transition:background .12s,transform .12s;
+}
+.copy-btn:hover{background:rgba(212,96,38,.36);transform:translateY(-1px);}
+.copy-btn.done{background:rgba(16,185,129,.18);border-color:rgba(16,185,129,.35);color:#6EE7B7;}
+/* No nested scroll on css-code — let body handle it */
+.css-code{padding:11px 14px;font-family:var(--mono);font-size:10.5px;line-height:1.75;white-space:pre-wrap;word-break:break-all;}
+.c-root{color:#FD9651;font-weight:700;}
+.c-var{color:rgba(255,255,255,.28);}
+.c-val{color:#f0b97e;}
+
+/* ── GENERATE BUTTONS ── */
+.gen-wrap{padding:12px 18px 4px;display:flex;flex-direction:column;gap:6px;}
+.gen-btn{
+  width:100%;padding:12px;
+  background:#D46026;
+  border:none;border-radius:var(--r);cursor:pointer;
+  font-family:var(--font);font-size:13.5px;font-weight:700;color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 3px 12px rgba(212,96,38,.36),0 1px 4px rgba(45,18,8,.1);
+  transition:transform .15s,box-shadow .15s,opacity .15s;
+}
+.gen-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 18px rgba(212,96,38,.44);}
+.gen-btn:active:not(:disabled){transform:translateY(0);}
+.gen-btn:disabled{opacity:.4;cursor:not-allowed;}
+.gen-btn-sec{
+  width:100%;padding:9px;
+  background:var(--surf);border:1.5px solid var(--bdr2);
+  border-radius:var(--r);cursor:pointer;
+  font-family:var(--font);font-size:12.5px;font-weight:700;color:#D46026;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  box-shadow:var(--sh);transition:all .13s;
+}
+.gen-btn-sec:hover:not(:disabled){background:var(--surf2);border-color:#D46026;transform:translateY(-1px);}
+.gen-btn-sec:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── FOOTER ── */
+.ftr{
+  background:var(--surf);
+  padding:7px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  flex-shrink:0;
+  border-top:1px solid var(--bdr);
+}
+.ftr-copy{font-size:10px;font-weight:500;color:var(--ink3);}
+.ftr-copy b{font-weight:700;color:var(--ink2);}
+.wa-btn{
+  display:flex;align-items:center;gap:5px;
+  background:#22C55E;border:none;border-radius:100px;cursor:pointer;
+  padding:4px 11px;font-family:var(--font);font-size:10.5px;font-weight:700;color:#fff;
+  text-decoration:none;white-space:nowrap;
+  box-shadow:0 2px 7px rgba(34,197,94,.28);
+  transition:background .12s,transform .12s;
+}
+.wa-btn:hover{background:#16A34A;transform:translateY(-1px);}
+
+/* Spacer at bottom of scroll */
+.scroll-pad{height:10px;flex-shrink:0;}
+</style>
+
+
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="hdr">
+  <!-- Left: CT icon + name -->
+  <div class="logo-wrap">
+    <div class="ct-icon">
+      <!-- ClampType logo: bracket-left, bracket-right, T-bar — all white -->
+      <svg viewBox="0 0 78 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20.9233 6.75L20.9409 6.98047L21.2671 11.2109L21.2876 11.4795H21.0181C18.5728 11.4795 16.7978 12.0161 15.646 13.043L15.645 13.0439C14.5193 14.0435 13.7603 15.4242 13.3784 17.2041C13.0351 19.0063 12.8628 21.0491 12.8628 23.334V50.666C12.8628 52.9068 13.035 54.9497 13.3784 56.7959L13.4546 57.125C13.8568 58.7469 14.5897 60.019 15.645 60.9561L15.646 60.957C16.7978 61.9839 18.5728 62.5205 21.0181 62.5205H21.2876L21.2671 62.7891L20.9409 67.0195L20.9233 67.25H20.6919C17.2821 67.25 14.5835 66.7052 12.6196 65.5908V65.5898C10.691 64.5141 9.30913 62.7695 8.46729 60.3799C7.63076 58.0052 7.12892 54.8978 6.95459 51.0674C6.78062 47.2013 6.69385 42.512 6.69385 37C6.69385 31.4448 6.78062 26.7554 6.95459 22.9326C7.12892 19.1022 7.63076 15.9948 8.46729 13.6201C9.3094 11.2297 10.692 9.48382 12.6216 8.4082C14.5853 7.29455 17.2832 6.75002 20.6919 6.75H20.9233Z" fill="white"/>
+        <path d="M57.1958 6.75C60.6014 6.75002 63.2774 7.29382 65.1987 8.40723C67.172 9.48219 68.5776 11.2279 69.4204 13.6201C70.2569 15.9948 70.7588 19.1022 70.9331 22.9326C71.1071 26.7554 71.1938 31.4448 71.1938 37C71.1938 42.512 71.1071 47.2013 70.9331 51.0674C70.7588 54.8978 70.2569 58.0052 69.4204 60.3799C68.5777 62.772 67.1728 64.5178 65.1997 65.5928L65.1987 65.5918C63.2774 66.7054 60.6017 67.25 57.1958 67.25H56.9644L56.9468 67.0195L56.6206 62.7891L56.6001 62.5205H56.8696C59.3609 62.5205 61.1325 61.983 62.2388 60.96L62.2427 60.9561C63.3668 59.958 64.1037 58.5795 64.4429 56.8018L64.4438 56.7969L64.5796 56.0957C64.876 54.4373 65.0249 52.6277 65.0249 50.666V23.334C65.0249 21.0484 64.8304 19.0055 64.4438 17.2041L64.4429 17.1982C64.1037 15.4205 63.3668 14.042 62.2427 13.0439L62.2388 13.04C61.1325 12.017 59.3609 11.4795 56.8696 11.4795H56.6001L56.6206 11.2109L56.9468 6.98047L56.9644 6.75H57.1958Z" fill="white"/>
+        <path d="M51.5562 13.9082V18.9639H41.978V59.9619H35.8745V18.9639H26.2964V13.9082H51.5562Z" fill="white"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span class="logo-name">ClampType</span>
+      <span class="logo-sub">Fluid Typography Scale · Elustra</span>
+    </div>
+  </div>
+
+  <!-- Right: Elustra full wordmark (7 paths, color #D46026) -->
+  <div class="e-side">
+    <svg class="e-logo" viewBox="0 0 275 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Elustra">
+      <path d="M15.1085 25.5591L34.8545 25.2343V32.1673L15.1085 31.8425V50.4685H31.9209L36.7953 49.5837L38.7473 42.4827L42.8094 42.0795C42.753 43.0987 42.6965 44.174 42.6514 45.3052C42.595 46.2684 42.5386 47.3101 42.4934 48.4077C42.437 49.5053 42.4145 50.6029 42.4145 51.6782C42.4145 52.5966 42.437 53.5486 42.4934 54.5455C42.5499 55.5423 42.6063 56.4159 42.6514 57.1663C42.7078 58.1296 42.753 59.0704 42.8094 59.9888L38.7473 59.5072L38.4201 58.4544C38.2621 58.1296 38.0365 57.8719 37.7657 57.6927C37.4949 57.5023 37.2015 57.4127 36.8743 57.4127H0.0789841L0.485188 53.3806L5.1114 51.5214L6.65723 47.6461V9.43065C6.65723 9.16185 6.58953 8.89304 6.45413 8.62423C6.31873 8.35542 6.05921 8.16502 5.68685 8.06422L0.406204 6.60818L0 2.57607H33.6359C33.9632 2.57607 34.2565 2.49767 34.5273 2.32966C34.7981 2.17286 35.0125 1.90405 35.1818 1.52324L35.43 0.470413L39.492 -0.0112C39.4356 0.851223 39.3792 1.71365 39.3341 2.56487C39.2777 3.25929 39.2212 4.06571 39.1761 4.98413C39.131 5.90256 39.0971 6.80978 39.0971 7.72821C39.0971 8.80344 39.1197 9.87866 39.1761 10.9539C39.2325 12.0291 39.2889 13.0259 39.3341 13.9332C39.3905 14.8964 39.4469 15.8708 39.492 16.8341L35.43 16.4308L33.478 10.3827L28.6035 9.49785H15.9209L15.1085 13.3732V25.5591Z" fill="#D46026"/>
+      <path d="M57.9287 7.90741C57.9287 7.42579 57.8159 7.05618 57.6015 6.82098C57.3871 6.57457 56.9809 6.46257 56.3829 6.46257H52.5691L52.1629 3.31528L63.1191 0.156799L67.5084 2.32966L66.1318 9.99066V50.4797C66.1318 50.8045 66.2221 51.107 66.4139 51.4094C66.6057 51.7006 66.8652 51.9022 67.1812 52.0142L72.3038 53.3806L72.71 57.4127C71.2432 57.3567 69.7876 57.2783 68.3208 57.1663C67.0796 57.1663 65.8046 57.1439 64.507 57.0879C63.2094 57.0319 62.0923 57.0095 61.1784 57.0095C60.2644 57.0095 59.1925 57.0319 57.9739 57.0879C56.7553 57.1439 55.5818 57.1663 54.4422 57.1663C53.201 57.2783 51.8921 57.3567 50.5381 57.4127L50.9443 53.3806L57.0373 51.443L57.9287 46.6044V7.90741Z" fill="#D46026"/>
+      <path d="M77.1787 22.5798L76.7725 19.4325L87.8979 16.2852L92.2872 18.4581L90.8203 26.1191V46.0332C90.8203 48.1277 91.1927 49.6509 91.96 50.5918C92.716 51.5326 93.8556 52.003 95.3676 52.003C96.6087 52.003 97.8951 51.723 99.2265 51.1518C100.558 50.5918 101.81 49.9421 103.006 49.2141C104.191 48.4861 105.241 47.7805 106.132 47.0749C107.023 46.3692 107.633 45.8652 107.96 45.5404V24.0359C107.96 23.5542 107.847 23.1846 107.633 22.9494C107.418 22.703 107.012 22.591 106.414 22.591H102.431L102.025 19.4437L113.15 16.2964L117.54 18.4693L116.073 26.1303V50.4798C116.073 50.8046 116.163 51.0958 116.355 51.3646C116.547 51.6334 116.829 51.8462 117.212 52.0142L121.353 53.3806L121.76 57.4127C120.349 57.3567 118.939 57.2783 117.54 57.1663C116.343 57.1663 115.114 57.1551 113.839 57.1215C112.564 57.0991 111.469 57.0767 110.544 57.0767L107.621 52.7198L107.7 51.5886C105.692 53.5262 103.379 55.1727 100.75 56.5503C98.1207 57.9168 95.3789 58.6112 92.5016 58.6112C89.3648 58.6112 86.9388 57.6815 85.235 55.8335C83.5312 53.9854 82.6737 51.275 82.6737 47.7245V24.0359C82.6737 23.5542 82.5609 23.1846 82.3465 22.9494C82.1321 22.703 81.7259 22.591 81.1279 22.591H77.1448L77.1787 22.5798Z" fill="#D46026"/>
+      <path d="M153.906 28.4264C152.958 29.4792 151.83 30.2632 150.532 30.8008C149.28 30.2632 148.174 29.468 147.203 28.4264C146.233 27.3735 145.421 26.2647 144.766 25.0775C145.037 24.5959 145.33 24.1254 145.658 23.6662C145.985 23.207 146.335 22.7702 146.718 22.3334C145.962 22.0086 145.24 21.7846 144.563 21.6502C143.886 21.5158 143.164 21.4486 142.408 21.4486C140.512 21.4486 139.012 21.8518 137.895 22.6582C136.789 23.4646 136.225 24.4838 136.225 25.7271C136.225 26.5895 136.507 27.3847 137.082 28.1015C137.646 28.8296 138.391 29.5128 139.316 30.1624C140.242 30.812 141.347 31.4504 142.645 32.1001C143.943 32.7497 145.33 33.4441 146.786 34.1945C148.14 34.8889 149.449 35.6393 150.724 36.4122C151.999 37.1962 153.105 38.0474 154.052 38.9882C155 39.9291 155.768 41.0267 156.366 42.2923C156.964 43.558 157.257 45.0252 157.257 46.6828C157.257 48.3405 156.896 49.9085 156.162 51.3646C155.429 52.8206 154.391 54.075 153.037 55.1503C151.683 56.2255 150.081 57.0767 148.242 57.6927C146.402 58.3088 144.371 58.6224 142.148 58.6224C140.309 58.6224 138.56 58.4096 136.913 57.9727C135.266 57.5471 133.776 56.9759 132.445 56.2815C131.113 55.5871 129.929 54.7583 128.868 53.8174C127.807 52.8766 126.927 51.891 126.228 50.8718L129.804 47.0861C131.7 49.1805 133.675 50.6702 135.739 51.5662C137.793 52.451 139.824 52.899 141.833 52.899C144.112 52.899 145.883 52.3726 147.158 51.331C148.433 50.2781 149.065 49.0573 149.065 47.6573C149.065 46.694 148.806 45.854 148.298 45.1596C147.779 44.4652 147.034 43.8044 146.064 43.1884C145.093 42.5723 143.852 41.9115 142.363 41.2171C140.873 40.5227 139.158 39.6267 137.206 38.5514C136.337 38.1258 135.378 37.5546 134.318 36.8602C133.257 36.1658 132.253 35.3257 131.316 34.3625C130.369 33.3993 129.579 32.2793 128.958 31.0136C128.338 29.748 128.022 28.3144 128.022 26.7015C128.022 25.0887 128.349 23.6886 128.992 22.3446C129.646 21.0006 130.549 19.8581 131.711 18.9173C132.873 17.9765 134.295 17.2373 135.976 16.6996C137.658 16.162 139.474 15.8932 141.415 15.8932C144.935 15.8932 147.892 16.6884 150.273 18.2677C152.653 19.8581 154.684 22.1206 156.366 25.0775C155.666 26.2647 154.831 27.3735 153.883 28.4264H153.906Z" fill="#D46026"/>
+      <path d="M169.545 22.9046L162.154 23.3078V18.1445L169.545 17.1813L171.982 5.00653H177.669V17.1813L192.45 17.1029V23.3078L177.669 23.0614V45.798C177.669 47.6797 177.985 49.1021 178.606 50.0765C179.226 51.0398 180.4 51.5326 182.137 51.5326C183.277 51.5326 184.45 51.3086 185.669 50.8494C186.888 50.3901 188.445 49.5725 190.34 48.3853L192.45 52.7422C190.498 54.7359 188.467 56.2143 186.357 57.1775C184.247 58.1407 182.182 58.6336 180.185 58.6336C178.718 58.6336 177.342 58.3648 176.044 57.8271C174.747 57.2895 173.607 56.5391 172.637 55.5647C171.666 54.6014 170.899 53.4366 170.357 52.0926C169.816 50.7485 169.545 49.2701 169.545 47.6573V22.9046Z" fill="#D46026"/>
+      <path d="M205.133 24.0358C205.133 23.5542 205.02 23.1846 204.806 22.9494C204.591 22.703 204.185 22.591 203.587 22.591H199.773L199.367 19.4437L210.335 16.2964L214.724 18.4693L214.069 22.3446C215.909 20.5749 218.007 19.0517 220.366 17.7861C222.724 16.5204 225.251 15.8932 227.959 15.8932C229.313 16.5876 230.453 17.3941 231.367 18.3125C232.292 19.2309 233.105 20.3285 233.804 21.6166C233.15 22.8038 232.337 23.9238 231.367 24.9991C230.397 26.0743 229.257 26.8807 227.959 27.4183C226.933 26.9367 225.985 26.2871 225.116 25.4807C224.247 24.6743 223.491 23.7558 222.837 22.7366C221.81 23.0614 220.772 23.4982 219.745 24.0694C218.718 24.6295 217.77 25.2231 216.902 25.8391C216.033 26.4551 215.288 27.0487 214.667 27.6087C214.047 28.1687 213.596 28.5944 213.325 28.8632V50.4797C213.325 50.8045 213.415 51.107 213.607 51.4094C213.799 51.7006 214.058 51.9022 214.374 52.0142L220.309 53.3806L220.715 57.4127C219.091 57.3567 217.488 57.2783 215.92 57.1663C214.622 57.1663 213.268 57.1439 211.858 57.0879C210.447 57.0319 209.285 57.0095 208.36 57.0095C207.435 57.0095 206.374 57.0319 205.156 57.0879C203.937 57.1439 202.763 57.1663 201.624 57.1663C200.383 57.2783 199.074 57.3567 197.72 57.4127L198.126 53.3806L204.219 51.443L205.11 46.6044V24.0358H205.133Z" fill="#D46026"/>
+      <path d="M248.394 28.5496C247.446 29.5688 246.318 30.3752 245.02 30.9688C243.768 30.3752 242.662 29.5688 241.692 28.5496C240.721 27.5303 239.875 26.3991 239.175 25.1671C240.913 22.2102 243.181 19.9253 246.002 18.3125C248.823 16.6996 252.016 15.8932 255.593 15.8932C257.489 15.8932 259.26 16.1396 260.919 16.6212C262.566 17.1029 264.022 17.8645 265.263 18.8837C266.504 19.9029 267.497 21.1686 268.23 22.6694C268.964 24.1702 269.325 25.9175 269.325 27.9111V50.4909C269.325 50.8158 269.415 51.107 269.607 51.3758C269.799 51.6446 270.081 51.8574 270.464 52.0254L274.605 53.3918L275.012 57.4239C273.601 57.3679 272.191 57.2895 270.792 57.1775C269.596 57.1775 268.366 57.1663 267.091 57.1327C265.816 57.1103 264.721 57.0879 263.796 57.0879C263.582 56.7631 263.39 56.4719 263.232 56.2031C263.017 55.9343 262.814 55.6543 262.622 55.3519C262.431 55.0607 262.261 54.7695 262.092 54.5007C260.524 55.8447 258.854 56.8639 257.094 57.5695C255.333 58.264 253.37 58.6224 251.204 58.6224C249.037 58.6224 247.277 58.3088 245.596 57.6927C243.915 57.0767 242.482 56.2143 241.285 55.1167C240.089 54.019 239.164 52.7086 238.487 51.2078C237.81 49.7069 237.472 48.0605 237.472 46.2908C237.472 44.2524 237.923 42.4043 238.814 40.7691C239.706 39.1338 240.936 37.7338 242.515 36.5802C244.084 35.4265 245.9 34.5193 247.954 33.8809C250.008 33.2313 252.208 32.9177 254.532 32.9177H261.189V28.8072C261.189 26.5447 260.512 24.7639 259.158 23.4422C257.804 22.1318 255.988 21.471 253.72 21.471C252.907 21.471 252.118 21.5494 251.362 21.7174C250.606 21.8742 249.85 22.1766 249.082 22.6022C249.41 23.0278 249.703 23.4646 249.974 23.8902C250.245 24.3158 250.515 24.7527 250.786 25.1783C250.132 26.4103 249.342 27.5415 248.394 28.5496ZM261.189 39.1114L255.017 39.3578C252.253 39.4698 250.087 40.1643 248.518 41.4523C246.95 42.7403 246.16 44.4316 246.16 46.5372C246.16 48.3629 246.781 49.9085 248.033 51.1742C249.274 52.4398 250.899 53.067 252.907 53.067C254.476 53.067 255.931 52.6526 257.252 51.8126C258.583 50.9838 259.892 49.8077 261.189 48.3069V39.1114Z" fill="#D46026"/>
+    </svg>
+  </div>
+</header>
+
+<!-- ══ SCROLLABLE BODY ══ -->
+<main class="body">
+
+  <!-- RATIO -->
+  <section class="sec">
+    <div class="sec-head"><div class="sec-pip"></div><span class="sec-label">Scale Ratio</span></div>
+    <div class="ratio-grid">
+      <div class="ratio-tile" data-ratio="1.125" onclick="setRatio(this)"><span class="ratio-val">1.125</span><span class="ratio-name">Minor 2nd</span></div>
+      <div class="ratio-tile" data-ratio="1.200" onclick="setRatio(this)"><span class="ratio-val">1.200</span><span class="ratio-name">Minor 3rd</span></div>
+      <div class="ratio-tile on" data-ratio="1.250" onclick="setRatio(this)"><span class="ratio-val">1.250</span><span class="ratio-name">Major 3rd</span></div>
+      <div class="ratio-tile" data-ratio="1.333" onclick="setRatio(this)"><span class="ratio-val">1.333</span><span class="ratio-name">Perfect 4th</span></div>
+      <div class="ratio-tile" data-ratio="1.500" onclick="setRatio(this)"><span class="ratio-val">1.500</span><span class="ratio-name">Perfect 5th</span></div>
+    </div>
+  </section>
+
+  <div class="sep"></div>
+
+  <!-- SETTINGS -->
+  <section class="sec">
+    <div class="sec-head"><div class="sec-pip"></div><span class="sec-label">Scale Settings</span></div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="inp-wrap">
+        <label class="inp-label">Base Size <span style="font-weight:400;color:var(--ink3);font-size:9.5px">= smallest UI size</span></label>
+        <div class="inp-shell">
+          <input class="inp-in" id="base" type="number" value="16" min="10" max="32" step="1" oninput="recalc()">
+          <span class="inp-unit">px</span>
+        </div>
+      </div>
+      <div class="inp-wrap">
+        <label class="inp-label">Custom Ratio</label>
+        <div class="inp-shell">
+          <input class="inp-in" id="ratio" type="number" value="1.25" min="1.05" max="2.5" step="0.001" oninput="onRatioInput()">
+        </div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="inp-wrap">
+        <label class="inp-label">Min Viewport</label>
+        <div class="sel-shell">
+          <select class="sel-in" id="vp-min" onchange="recalc()">
+            <option value="280">280px — XS</option>
+            <option value="320" selected>320px — Mobile</option>
+            <option value="360">360px — Mobile L</option>
+            <option value="390">390px — iPhone 14</option>
+            <option value="414">414px — iPhone Plus</option>
+            <option value="430">430px — iPhone Pro Max</option>
+            <option value="480">480px — Phablet</option>
+            <option value="600">600px — Small Tablet</option>
+            <option value="768">768px — Tablet</option>
+          </select>
+          <svg class="sel-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+      </div>
+      <div class="inp-wrap">
+        <label class="inp-label">Max Viewport</label>
+        <div class="sel-shell">
+          <select class="sel-in" id="vp-max" onchange="recalc()">
+            <option value="768">768px — Tablet</option>
+            <option value="1024">1024px — Laptop</option>
+            <option value="1280">1280px — Desktop</option>
+            <option value="1440" selected>1440px — Desktop L</option>
+            <option value="1536">1536px — 2K</option>
+            <option value="1920">1920px — FHD</option>
+            <option value="2560">2560px — QHD</option>
+            <option value="3840">3840px — 4K</option>
+          </select>
+          <svg class="sel-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sep"></div>
+
+  <!-- PREVIEW TEXT -->
+  <section class="sec" style="padding-bottom:0">
+    <div class="sec-head" style="margin-bottom:8px">
+      <div class="sec-pip"></div>
+      <span class="sec-label">Preview Text</span>
+      <span class="sec-info">reflects everywhere</span>
+    </div>
+  </section>
+  <div class="ct-wrap" style="padding-top:8px">
+    <div class="ct-shell">
+      <span class="ct-pre">Aa</span>
+      <input class="ct-in" id="custom-text" type="text" placeholder="Type your text — previews everywhere instantly…" oninput="onCustomText()">
+    </div>
+    <div class="ct-hint">Base size (<span id="hint-base">16px</span>) = H5/Body/CTA minimum — the smallest font size in your UI.</div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- SCALE TABLE -->
+  <section class="sec">
+    <div class="sec-head">
+      <div class="sec-pip"></div>
+      <span class="sec-label">Scale Preview</span>
+      <span class="sec-info" id="scale-info">320 → 1440px</span>
+    </div>
+    <div class="scale-table">
+      <div class="scale-row scale-row-hdr">
+        <div class="sc-tag sc-hdr">Level</div>
+        <div class="sc-preview sc-hdr">Min</div>
+        <div class="sc-preview sc-hdr">Max</div>
+        <div class="sc-range sc-hdr">Range</div>
+        <div class="sc-clamp sc-hdr">clamp()</div>
+      </div>
+      <div id="scale-rows"></div>
+    </div>
+  </section>
+
+  <div class="sep"></div>
+
+  <!-- FLUID PREVIEW -->
+  <section class="sec">
+    <div class="sec-head">
+      <div class="sec-pip"></div>
+      <span class="sec-label">Fluid Preview</span>
+    </div>
+    <div class="fluid-wrap">
+      <div class="fluid-top">
+        <span class="fluid-lbl" id="fluid-lbl">H1</span>
+        <span class="fluid-size" id="fluid-sz">—</span>
+      </div>
+      <div class="fluid-vp-row">
+        <span class="fluid-vp-label">Viewport</span>
+        <select class="fluid-vp-sel" id="fluid-vp" onchange="renderFluidPreview()"></select>
+      </div>
+      <div class="fluid-sample-wrap">
+        <div class="fluid-sample" id="fluid-sample">ClampType</div>
+      </div>
+      <div class="fluid-clamp-row" id="fluid-clamp">—</div>
+      <div class="fluid-lvl-row" id="fluid-lvls"></div>
+    </div>
+  </section>
+
+  <div class="sep"></div>
+
+  <!-- SCRIPT STRESS -->
+  <section class="sec">
+    <div class="sec-head">
+      <div class="sec-pip"></div>
+      <span class="sec-label">Script Stress Test</span>
+    </div>
+    <div class="scripts-wrap">
+      <div class="scripts-top">
+        <span class="sc-dd-label">Script</span>
+        <select class="sc-dd" id="scripts-dd" onchange="onScriptChange()"></select>
+        <span class="sc-badge" id="sc-dir-badge">LTR</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-text" id="sc-text-el"></div>
+        <div class="sc-meta" id="sc-meta-el"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sep"></div>
+
+  <!-- CSS OUTPUT -->
+  <section class="sec sec-last">
+    <div class="sec-head">
+      <div class="sec-pip"></div>
+      <span class="sec-label">CSS Variables</span>
+    </div>
+    <div class="css-box">
+      <div class="css-hdr">
+        <span class="css-hdr-lbl">Ready to paste</span>
+        <button class="copy-btn" id="copy-btn" onclick="copyCSS()">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy
+        </button>
+      </div>
+      <div class="css-code" id="css-out"></div>
+    </div>
+  </section>
+
+  <!-- GENERATE -->
+  <div class="gen-wrap">
+    <button class="gen-btn" id="btn-all" onclick="genAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+      Generate Variables + Frame
+    </button>
+    <button class="gen-btn-sec" id="btn-vars" onclick="genVars()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      Variables Only
+    </button>
+    <button class="gen-btn-sec" id="btn-frame" onclick="genFrame()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+      Frame Only
+    </button>
+  </div>
+  <div class="scroll-pad"></div>
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer class="ftr">
+  <span class="ftr-copy"><b>Copyright Elustra 2026</b> · Mithil Mogare</span>
+  <a class="wa-btn" href="https://wa.me/918888241144?text=Hi%21%20I%20need%20help%20with%20ClampType." target="_blank" rel="noopener">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a9 9 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.125.557 4.12 1.529 5.855L0 24l6.335-1.51A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.945 9.945 0 0 1-5.193-1.374L3 21.5l.893-3.667A9.959 9.959 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+    Contact Us
+  </a>
+</footer>
+
+<script>
+var S={base:16,ratio:1.25,vpMin:320,vpMax:1440,fluidLevel:0,scale:[],customText:''};
+
+var LEVELS=[
+  {name:'fs/h1',tag:'H1',exp:4},{name:'fs/h2',tag:'H2',exp:3},{name:'fs/h3',tag:'H3',exp:2},
+  {name:'fs/h4',tag:'H4',exp:1},{name:'fs/h5',tag:'H5',exp:0},{name:'fs/h6',tag:'H6',exp:-1},
+  {name:'fs/body',tag:'Body',exp:-1},{name:'fs/caption',tag:'Caption',exp:-2},{name:'fs/cta',tag:'CTA',exp:0}
+];
+
+var SCRIPTS=[
+  {id:'en',label:'English',sys:'Latin',dir:'ltr',def:'The quick brown fox jumps over the lazy dog. Typography speaks before words do.'},
+  {id:'de',label:'German',sys:'Latin+',dir:'ltr',def:'Donaudampfschifffahrtsgesellschaftskapitän — Typografie spricht, bevor Worte es tun.'},
+  {id:'fr',label:'French',sys:'Latin',dir:'ltr',def:"La typographie parle avant que les mots ne soient lus. Une belle mise en page séduit d'emblée."},
+  {id:'es',label:'Spanish',sys:'Latin',dir:'ltr',def:'La buena tipografía es un mensaje visual. El texto hermoso habla antes que las palabras.'},
+  {id:'pt',label:'Portuguese',sys:'Latin',dir:'ltr',def:'A boa tipografia é uma mensagem visual. O texto bonito fala antes das palavras.'},
+  {id:'it',label:'Italian',sys:'Latin',dir:'ltr',def:'La buona tipografia è un messaggio visivo. Il bello testo parla prima delle parole.'},
+  {id:'nl',label:'Dutch',sys:'Latin+',dir:'ltr',def:'Goede typografie is een visuele boodschap. Mooie tekst spreekt voor de woorden.'},
+  {id:'fi',label:'Finnish',sys:'Latin+',dir:'ltr',def:'Lentokonesuihkuturbiinimoottoriapumekaanikkoaliupseerioppilas — hyvä typografia.'},
+  {id:'pl',label:'Polish',sys:'Latin+',dir:'ltr',def:'Dobra typografia to wizualny komunikat. Piękny tekst mówi zanim słowa zostaną przeczytane.'},
+  {id:'ru',label:'Russian',sys:'Cyrillic',dir:'ltr',def:'Хорошая типографика — это визуальное сообщение. Красивый текст говорит раньше слов.'},
+  {id:'uk',label:'Ukrainian',sys:'Cyrillic',dir:'ltr',def:'Хороша типографіка — це візуальне повідомлення. Гарний текст говорить раніше слів.'},
+  {id:'sr',label:'Serbian',sys:'Cyrillic',dir:'ltr',def:'Добра типографија је визуелна порука. Леп текст говори пре него што се речи прочитају.'},
+  {id:'el',label:'Greek',sys:'Greek',dir:'ltr',def:'Η καλή τυπογραφία είναι ένα οπτικό μήνυμα. Το όμορφο κείμενο μιλά πριν από τις λέξεις.'},
+  {id:'ar',label:'Arabic',sys:'Arabic',dir:'rtl',def:'الطباعة الجيدة هي الرسالة المرئية. النص الجميل يتحدث قبل أن تُقرأ الكلمات.'},
+  {id:'fa',label:'Persian / Farsi',sys:'Arabic',dir:'rtl',def:'تایپوگرافی خوب یک پیام بصری است. متن زیبا پیش از خواندن کلمات صحبت می‌کند.'},
+  {id:'ur',label:'Urdu',sys:'Arabic',dir:'rtl',def:'اچھی ٹائپوگرافی ایک بصری پیغام ہے۔ خوبصورت متن الفاظ سے پہلے بولتا ہے۔'},
+  {id:'he',label:'Hebrew',sys:'Hebrew',dir:'rtl',def:'טיפוגרפיה טובה היא מסר ויזואלי. הטקסט היפה מדבר לפני שהמילים נקראות.'},
+  {id:'hi',label:'Hindi',sys:'Devanagari',dir:'ltr',def:'अच्छी टाइपोग्राफी एक दृश्य संदेश है। सुंदर पाठ शब्दों से पहले बोलता है।'},
+  {id:'mr',label:'Marathi',sys:'Devanagari',dir:'ltr',def:'चांगले टायपोग्राफी एक दृश्य संदेश आहे. सुंदर मजकूर शब्दांआधी बोलतो.'},
+  {id:'ne',label:'Nepali',sys:'Devanagari',dir:'ltr',def:'राम्रो टाइपोग्राफी एक दृश्य सन्देश हो। सुन्दर पाठले शब्दहरू भन्दा पहिले बोल्छ।'},
+  {id:'ta',label:'Tamil',sys:'Tamil',dir:'ltr',def:'நல்ல டைப்போகிராஃபி ஒரு காட்சி செய்தி. அழகான உரை வார்த்தைகளுக்கு முன் பேசுகிறது.'},
+  {id:'te',label:'Telugu',sys:'Telugu',dir:'ltr',def:'మంచి టైపోగ్రఫీ ఒక దృశ్య సందేశం. అందమైన వచనం పదాలకు ముందే మాట్లాడుతుంది.'},
+  {id:'kn',label:'Kannada',sys:'Kannada',dir:'ltr',def:'ಉತ್ತಮ ಟೈಪೋಗ್ರಫಿ ಒಂದು ದೃಶ್ಯ ಸಂದೇಶ. ಸುಂದರ ಪಠ್ಯ ಪದಗಳಿಗಿಂತ ಮುಂಚೆ ಮಾತನಾಡುತ್ತದೆ.'},
+  {id:'ml',label:'Malayalam',sys:'Malayalam',dir:'ltr',def:'നല്ല ടൈപ്പോഗ്രഫി ഒരു ദൃശ്യ സന്ദേശമാണ്. മനോഹരമായ ടെക്സ്റ്റ് വാക്കുകൾക്ക് മുമ്പ് സംസാരിക്കുന്നു.'},
+  {id:'gu',label:'Gujarati',sys:'Gujarati',dir:'ltr',def:'સારી ટાઇપોગ્રાફી એ દ્રશ્ય સંદેશ છે. સુંદર ટેક્સ્ટ શબ્દો પહેલા બોલે છે.'},
+  {id:'bn',label:'Bengali',sys:'Bengali',dir:'ltr',def:'ভালো টাইপোগ্রাফি একটি দৃশ্যমান বার্তা। সুন্দর পাঠ্য শব্দের আগে কথা বলে।'},
+  {id:'pa',label:'Punjabi',sys:'Gurmukhi',dir:'ltr',def:'ਚੰਗੀ ਟਾਈਪੋਗ੍ਰਾਫੀ ਇੱਕ ਦ੍ਰਿਸ਼ਟੀਗਤ ਸੁਨੇਹਾ ਹੈ। ਸੁੰਦਰ ਪਾਠ ਸ਼ਬਦਾਂ ਤੋਂ ਪਹਿਲਾਂ ਬੋਲਦਾ ਹੈ।'},
+  {id:'or',label:'Odia',sys:'Odia',dir:'ltr',def:'ଭଲ ଟାଇପୋଗ୍ରାଫି ଏକ ଦୃଶ୍ୟ ବାର୍ତ୍ତା। ସୁନ୍ଦର ପାଠ ଶବ୍ଦଗୁଡ଼ିକ ପୂର୍ବରୁ କଥା ବୋଲେ।'},
+  {id:'si',label:'Sinhala',sys:'Sinhala',dir:'ltr',def:'හොඳ ටයිපොග්‍රැෆි යනු දෘශ්‍ය පණිවිඩයකි. සුන්දර පෙළ වචනවලට පෙර කතා කරයි.'},
+  {id:'zh',label:'Chinese (Simp)',sys:'CJK',dir:'ltr',def:'良好的字体排版是视觉信息传达。美丽的文字在语言之前表达思想。'},
+  {id:'zht',label:'Chinese (Trad)',sys:'CJK',dir:'ltr',def:'良好的字體排版是視覺信息傳達。美麗的文字在語言之前表達思想。'},
+  {id:'ja',label:'Japanese',sys:'CJK',dir:'ltr',def:'良いタイポグラフィは視覚的なメッセージです。美しいテキストは言葉の前に語りかけます。'},
+  {id:'ko',label:'Korean',sys:'Hangul',dir:'ltr',def:'좋은 타이포그래피는 시각적 메시지입니다. 아름다운 텍스트는 말보다 먼저 이야기합니다.'},
+  {id:'th',label:'Thai',sys:'Thai',dir:'ltr',def:'การออกแบบตัวอักษรที่ดีคือข้อความที่มองเห็น ข้อความที่สวยงามพูดก่อนคำพูด'},
+  {id:'km',label:'Khmer',sys:'Khmer',dir:'ltr',def:'ការបោះពុម្ពអក្សរល្អគឺជាសាររូបភាព។ អត្ថបទស្រស់ស្អាតនិយាយមុនពាក្យ។'},
+  {id:'my',label:'Burmese',sys:'Myanmar',dir:'ltr',def:'ကောင်းမွန်သောစာလုံးဆိုင်ရာသည် မြင်ကွင်းဆိုင်ရာ မက်ဆေ့ချ်တစ်ခုဖြစ်သည်။'},
+  {id:'lo',label:'Lao',sys:'Lao',dir:'ltr',def:'ການພິມດີແມ່ນຂໍ້ຄວາມທີ່ເບິ່ງເຫັນໄດ້. ຕົວອັກສອນທີ່ສວຍງາມເວົ້າກ່ອນຄໍາ.'},
+  {id:'am',label:'Amharic',sys:'Ethiopic',dir:'ltr',def:'ጥሩ ታይፖግራፊ ምስላዊ መልእክት ነው። የሚያምር ጽሑፍ ቃላት ከመነበባቸው በፊት ይናገራል።'},
+  {id:'ka',label:'Georgian',sys:'Georgian',dir:'ltr',def:'კარგი ტიპოგრაფია ვიზუალური გზავნილია. ლამაზი ტექსტი სიტყვებამდე ლაპარაკობს.'},
+  {id:'hy',label:'Armenian',sys:'Armenian',dir:'ltr',def:'Լավ տպագրությունը տեսողական հաղorդagágelnia e. Gełeçik tekste khosum e baṙerits aṙaj.'},
+  {id:'emoji',label:'Emoji',sys:'Emoji',dir:'ltr',def:'✨ Typography 🎨 speaks 💬 before 🔤 words 🚀 — ClampType 📐 makes 🔥 every 💡 scale ✅ fluid 🌊'}
+];
+
+var activeScriptIdx=0;
+
+function clampVal(base,ratio,exp,vpMin,vpMax){
+  var minPx=+(base*Math.pow(ratio,exp)).toFixed(2);
+  var maxPx=+(base*Math.pow(ratio,exp+1)).toFixed(2);
+  var minRem=+(minPx/16).toFixed(4);
+  var maxRem=+(maxPx/16).toFixed(4);
+  var slope=(maxPx-minPx)/(vpMax-vpMin);
+  var intercept=minPx-slope*vpMin;
+  var slopePct=+(slope*100).toFixed(4);
+  var intRem=+(intercept/16).toFixed(4);
+  return{minPx:minPx,maxPx:maxPx,minRem:minRem,maxRem:maxRem,clamp:'clamp('+minRem+'rem, '+slopePct+'vi + '+intRem+'rem, '+maxRem+'rem)'};
+}
+function fluidPx(item,vp){
+  var slope=(item.maxPx-item.minPx)/(S.vpMax-S.vpMin);
+  return Math.min(Math.max(slope*vp+item.minPx-slope*S.vpMin,item.minPx),item.maxPx);
+}
+function getText(fallback){return S.customText||(fallback||'ClampType');}
+
+function recalc(){
+  S.base=parseFloat(document.getElementById('base').value)||16;
+  S.ratio=parseFloat(document.getElementById('ratio').value)||1.25;
+  S.vpMin=parseInt(document.getElementById('vp-min').value)||320;
+  S.vpMax=parseInt(document.getElementById('vp-max').value)||1440;
+  document.getElementById('hint-base').textContent=S.base+'px';
+  document.getElementById('scale-info').textContent=S.vpMin+' → '+S.vpMax+'px';
+  S.scale=LEVELS.map(function(lv){
+    var cv=clampVal(S.base,S.ratio,lv.exp,S.vpMin,S.vpMax);
+    return{name:lv.name,tag:lv.tag,exp:lv.exp,minPx:cv.minPx,maxPx:cv.maxPx,minRem:cv.minRem,maxRem:cv.maxRem,clamp:cv.clamp};
+  });
+  renderScaleTable();
+  renderCSS();
+  buildFluidVp();
+  renderFluidLvls();
+  renderFluidPreview();
+  renderScriptStress();
+}
+
+function setRatio(el){
+  document.querySelectorAll('.ratio-tile').forEach(function(t){t.classList.remove('on');});
+  el.classList.add('on');
+  document.getElementById('ratio').value=el.dataset.ratio;
+  recalc();
+}
+function onRatioInput(){
+  document.querySelectorAll('.ratio-tile').forEach(function(t){t.classList.remove('on');});
+  recalc();
+}
+function onCustomText(){
+  S.customText=document.getElementById('custom-text').value;
+  renderScaleTable();
+  renderFluidPreview();
+  renderScriptStress();
+}
+
+function renderScaleTable(){
+  var h='';
+  for(var i=0;i<S.scale.length;i++){
+    var v=S.scale[i];
+    var txt=getText(v.tag);
+    var minSz=Math.min(v.minPx,36);
+    var maxSz=Math.min(v.maxPx,48);
+    h+='<div class="scale-row">'+
+      '<div class="sc-tag">'+v.tag+'</div>'+
+      '<div class="sc-preview" style="font-size:'+minSz+'px" title="Min: '+v.minPx+'px">'+txt+'</div>'+
+      '<div class="sc-preview" style="font-size:'+maxSz+'px" title="Max: '+v.maxPx+'px">'+txt+'</div>'+
+      '<div class="sc-range">'+v.minPx.toFixed(0)+'–'+v.maxPx.toFixed(0)+'px</div>'+
+      '<div class="sc-clamp">'+v.clamp+'</div>'+
+      '</div>';
+  }
+  document.getElementById('scale-rows').innerHTML=h;
+}
+
+function renderCSS(){
+  var lines=['<span class="c-root">:root {</span>'];
+  for(var i=0;i<S.scale.length;i++){
+    var v=S.scale[i];
+    lines.push('  <span class="c-var">--fs-'+v.name.replace('fs/','')+': </span><span class="c-val">'+v.clamp+'</span>;');
+  }
+  lines.push('<span class="c-root">}</span>');
+  document.getElementById('css-out').innerHTML=lines.join('\n');
+}
+
+var rawCSS='';
+function buildRawCSS(){
+  var lines=[':root {'];
+  for(var i=0;i<S.scale.length;i++){
+    var v=S.scale[i];
+    lines.push('  --fs-'+v.name.replace('fs/','')+': '+v.clamp+';');
+  }
+  lines.push('}');
+  rawCSS=lines.join('\n');
+  return rawCSS;
+}
+
+function copyCSS(){
+  buildRawCSS();
+  function done(){
+    var b=document.getElementById('copy-btn');
+    b.classList.add('done');b.textContent='✓ Copied';
+    setTimeout(function(){b.classList.remove('done');b.innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy';},2000);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(rawCSS).then(done);}
+  else{var ta=document.createElement('textarea');ta.value=rawCSS;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);done();}
+}
+
+function buildFluidVp(){
+  var sel=document.getElementById('fluid-vp');
+  var pts=[S.vpMin];
+  var range=S.vpMax-S.vpMin;
+  var step=range<=800?40:range<=1400?80:160;
+  for(var v=S.vpMin+step;v<S.vpMax;v+=step)pts.push(v);
+  pts.push(S.vpMax);
+  var common=[375,414,768,1024,1280,1440,1920];
+  for(var c=0;c<common.length;c++){if(common[c]>S.vpMin&&common[c]<S.vpMax&&pts.indexOf(common[c])===-1)pts.push(common[c]);}
+  pts.sort(function(a,b){return a-b;});
+  var unique=pts.filter(function(v,i,a){return a.indexOf(v)===i;});
+  var labels={375:'375 — iPhone SE',414:'414 — Plus',768:'768 — iPad',1024:'1024 — iPad Pro',1280:'1280 — Laptop',1440:'1440 — Desktop',1920:'1920 — FHD'};
+  var mid=Math.round((S.vpMin+S.vpMax)/2);
+  var closest=unique.reduce(function(a,b){return Math.abs(b-mid)<Math.abs(a-mid)?b:a;});
+  var h='';
+  for(var j=0;j<unique.length;j++){
+    var px=unique[j];
+    var lbl=labels[px]?labels[px]+'px':px+'px';
+    h+='<option value="'+px+'"'+(px===closest?' selected':'')+'>'+lbl+'</option>';
+  }
+  sel.innerHTML=h;
+}
+
+function renderFluidLvls(){
+  var h='';
+  for(var i=0;i<LEVELS.length;i++){
+    h+='<button class="fl-btn'+(i===S.fluidLevel?' on':'')+'" onclick="setFluidLevel('+i+')">'+LEVELS[i].tag+'</button>';
+  }
+  document.getElementById('fluid-lvls').innerHTML=h;
+}
+function setFluidLevel(idx){S.fluidLevel=idx;renderFluidLvls();renderFluidPreview();}
+
+function renderFluidPreview(){
+  if(!S.scale.length)return;
+  var vp=parseInt(document.getElementById('fluid-vp').value)||Math.round((S.vpMin+S.vpMax)/2);
+  var item=S.scale[S.fluidLevel];
+  if(!item)return;
+  var px=fluidPx(item,vp);
+  document.getElementById('fluid-sz').textContent=px.toFixed(1)+'px';
+  document.getElementById('fluid-lbl').textContent=item.tag;
+  document.getElementById('fluid-clamp').textContent=item.clamp;
+  var el=document.getElementById('fluid-sample');
+  el.style.fontSize=Math.min(px,76)+'px';
+  el.style.fontWeight='500';
+  el.textContent=getText(item.tag+' — Aa');
+}
+
+function buildScriptDD(){
+  var h='';
+  for(var i=0;i<SCRIPTS.length;i++){
+    var sc=SCRIPTS[i];
+    h+='<option value="'+i+'">'+sc.label+' · '+sc.sys+(sc.dir==='rtl'?' ↔ RTL':' · LTR')+'</option>';
+  }
+  document.getElementById('scripts-dd').innerHTML=h;
+}
+function onScriptChange(){
+  activeScriptIdx=parseInt(document.getElementById('scripts-dd').value)||0;
+  renderScriptStress();
+}
+function renderScriptStress(){
+  var sc=SCRIPTS[activeScriptIdx];
+  var fontSize=S.scale.length?Math.min(Math.max(S.scale[2].minPx,13),24):16;
+  var text=S.customText||sc.def;
+  var el=document.getElementById('sc-text-el');
+  el.textContent=text;
+  el.setAttribute('dir',sc.dir);
+  el.style.fontSize=fontSize+'px';
+  el.style.fontWeight='500';
+  el.style.textAlign=sc.dir==='rtl'?'right':'left';
+  document.getElementById('sc-meta-el').textContent=sc.label+' · '+sc.sys+(sc.dir==='rtl'?' · RTL':' · LTR')+(S.scale.length?' · H3 range: '+S.scale[2].minPx.toFixed(0)+'–'+S.scale[2].maxPx.toFixed(0)+'px':'');
+  var badge=document.getElementById('sc-dir-badge');
+  badge.textContent=sc.dir==='rtl'?'RTL':'LTR';
+  badge.style.color=sc.dir==='rtl'?'#D46026':'var(--ink3)';
+}
+
+function getPayload(type){return{type:type,vars:S.scale,base:S.base,ratio:S.ratio.toFixed(3),vpMin:S.vpMin,vpMax:S.vpMax,css:buildRawCSS()};}
+function dis(ms){['btn-all','btn-vars','btn-frame'].forEach(function(id){document.getElementById(id).disabled=true;});setTimeout(function(){['btn-all','btn-vars','btn-frame'].forEach(function(id){document.getElementById(id).disabled=false;});},ms);}
+function genAll(){dis(3500);parent.postMessage({pluginMessage:getPayload('generate-vars-and-frame')},'*');}
+function genVars(){dis(2200);parent.postMessage({pluginMessage:getPayload('generate-vars')},'*');}
+function genFrame(){dis(3500);parent.postMessage({pluginMessage:getPayload('generate-frame-only')},'*');}
+
+buildScriptDD();
+recalc();
+</script>
+</body>
+</html>
